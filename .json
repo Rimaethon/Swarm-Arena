@@ -1,0 +1,12 @@
+{
+    "$id": 0,
+    "$type": "0|Data.PlayerData, Assembly-CSharp",
+    "currentPlayerLevel": 1,
+    "currentExperience": 0,
+    "currentGold": 3000,
+    "currentEnergy": 5,
+    "currentGems": 100,
+    "lastEnergyRefillUnixTime": 0,
+    "currentGameLevel": 1,
+    "playerHealth": 5
+}
