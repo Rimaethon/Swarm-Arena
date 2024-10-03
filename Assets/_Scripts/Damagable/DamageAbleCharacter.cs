@@ -28,23 +28,17 @@ public class DamageAbleCharacter : MonoBehaviour, IDamageAble
 		{
 			return;
 		}
-
 		CalculateDamage(damage);
-
 		if (!_isDead)
 		{
 			OnTakeDamageEvent?.Invoke(targetCausedDamage);
 		}
 	}
 
-
-
 	protected virtual void CalculateDamage(int damage)
 	{
 		_hp -= damage;
-
 		_hp = Mathf.Clamp(_hp, 0, _maxHP);
-
 		if (!(_hp <= 0)) return;
 		_isDead = true;
 		_agent.SetDeadState();

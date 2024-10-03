@@ -28,7 +28,7 @@ public class RangeWeapon : MonoBehaviour, IRangeWeapon, IWeapon
 	{
 		trailRendererPool = new ObjectPool<TrailRenderer>(CreateTrail);
 		playerData= SaveManager.Instance.GetPlayerData();
-		onImpact.ImpactType = ImpactType.Shot;
+		onImpact.ImpactType = ImpactType.SHOT;
 	}
 
 	public void InitializeWeapon(WeaponDataSO weaponData)

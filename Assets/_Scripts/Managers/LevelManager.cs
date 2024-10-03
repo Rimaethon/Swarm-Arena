@@ -1,5 +1,4 @@
-﻿using System;
-using Data;
+﻿using Data;
 using UnityEngine;
 
 namespace Managers
@@ -14,6 +13,7 @@ namespace Managers
 		private readonly OnLevelCompleted onLevelCompleted = new OnLevelCompleted();
 		private readonly OnUpdateUI onUpdateUI = new OnUpdateUI();
 		private PlayerData playerData;
+
 		private void Awake()
 		{
 			levelTime = SaveManager.Instance.GetCurrentLevelData().levelDurationInSeconds;
@@ -25,7 +25,11 @@ namespace Managers
 		private void OnEnable()
 		{
 			EventManager.RegisterHandler<OnEnemyKilled>(HandleEnemyKilled);
+		}
 
+		private void OnDisable()
+		{
+			EventManager.UnregisterHandler<OnEnemyKilled>(HandleEnemyKilled);
 		}
 
 		private void HandleEnemyKilled(OnEnemyKilled data)
@@ -53,11 +57,9 @@ namespace Managers
 			if (levelTime < 0)
 				return;
 			levelTime--;
-			if (levelTime == 0)
-			{
-				EventManager.Send(onLevelCompleted);
-				SaveManager.Instance.SetPlayerData(playerData);
-			}
+			if (levelTime != 0) return;
+			EventManager.Send(onLevelCompleted);
+			SaveManager.Instance.SetPlayerData(playerData);
 		}
 	}
 }

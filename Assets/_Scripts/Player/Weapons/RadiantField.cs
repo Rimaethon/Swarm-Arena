@@ -9,7 +9,7 @@ public class RadiantField : MonoBehaviour, IWeapon
 	private float range;
 	private float cooldown;
 	private float timer;
-	private OnDamage onDamage = new OnDamage();
+	private readonly OnDamage onDamage = new OnDamage();
 
 	public void InitializeWeapon(WeaponDataSO weaponData)
 	{

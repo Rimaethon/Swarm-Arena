@@ -19,8 +19,4 @@ public class MeleeAIAgent : BaseAIAgent
         StateMachine.ChangeState(InitialStateID);
     }
 
-    public void SetAttackToFalse()
-    {
-        IsAttacking = false;
-    }
 }

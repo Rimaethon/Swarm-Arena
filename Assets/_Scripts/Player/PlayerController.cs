@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         {
             if(!playerData.playerTalents[weapon.itemID].isUnlocked)
                 continue;
-            if (weapon.weaponType == WeaponType.Handgun)
+            if (weapon.weaponType == WeaponType.HANDGUN)
             {
                 currentWeapon=Instantiate(weapon.weaponPrefab, weaponHolder).GetComponent<RangeWeapon>();
                 currentWeapon.InitializeWeapon(weapon);

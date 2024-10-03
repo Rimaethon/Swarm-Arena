@@ -7,7 +7,6 @@ using UnityEngine;
 
         public virtual void Awake()
         {
-
         }
 
         public virtual void OnDisable()

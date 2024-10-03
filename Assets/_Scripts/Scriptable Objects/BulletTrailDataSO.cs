@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Bullet Trail Data", menuName = "Epidemic/Data/Bullet Trail Data")]
+[CreateAssetMenu(fileName = "Bullet Trail Data", menuName = "Data/Bullet Trail Data")]
 public class BulletTrailDataSO : ScriptableObject
 {
     public Material Material;

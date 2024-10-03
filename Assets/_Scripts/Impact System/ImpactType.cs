@@ -1,5 +1,5 @@
 ﻿public enum ImpactType
 {
-    Footstep,
-    Shot
+    FOOTSTEP,
+    SHOT
 }

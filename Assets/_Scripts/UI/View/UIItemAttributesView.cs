@@ -140,13 +140,6 @@ public class UIItemAttributesView : MonoBehaviour
 	private void SetAttributeView(int itemID, ItemAttributeTypes attributeType)
 	{
 		UIAttributeView attributeView = attributeViews.Find(x => x.itemID == itemID && x.attributeType == attributeType);
-
-		Debug.Log(itemID);
-		foreach (var VARIABLE in playerData.playerTalents[itemID].talentLevels.Keys)
-		{
-			Debug.Log(VARIABLE);
-
-		}
 		int level = playerData.playerTalents[itemID].talentLevels[attributeType];
 		attributeView.levelText.text = "Lv. " + level;
 	}

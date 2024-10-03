@@ -12,6 +12,6 @@ public class WeaponDataSO : UpgradeAbleItemSO
 
 public enum WeaponType
 {
-    Handgun,
-    Skill
+    HANDGUN,
+    SKILL
 }

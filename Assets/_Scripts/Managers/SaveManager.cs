@@ -11,8 +11,8 @@ namespace Managers
 		private JsonDataHandler<SettingsData> settingsDataHandler;
 		private JsonDataHandler<PlayerData> playerDataHandler;
 		private JsonDataHandler<LevelData> levelDataHandler;
-		private OnSettingsChanged onSettingsChanged = new OnSettingsChanged();
-		private OnPlayerDataChanged onPlayerDataChanged = new OnPlayerDataChanged();
+		private readonly OnSettingsChanged onSettingsChanged = new OnSettingsChanged();
+		private readonly OnPlayerDataChanged onPlayerDataChanged = new OnPlayerDataChanged();
 
 		private SettingsData settingsData;
 		private PlayerData playerData;
@@ -76,7 +76,6 @@ namespace Managers
 			playerDataHandler.Save(playerData, playerSavePath);
 			onPlayerDataChanged.playerData = playerData;
 			EventManager.Send(onPlayerDataChanged);
-
 		}
 
 		public LevelData GetCurrentLevelData()

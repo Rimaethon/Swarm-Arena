@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Managers;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class MeleeDamageCollider : MonoBehaviour
         damageCollider.enabled = false;
         damageCollider.isTrigger = true;
         onImpact.HitNormal = Vector3.forward;
-        onImpact.ImpactType = ImpactType.Shot;
+        onImpact.ImpactType = ImpactType.SHOT;
     }
 
     public void EnableCollider(int damage)
@@ -42,6 +41,5 @@ public class MeleeDamageCollider : MonoBehaviour
         onImpact.HitPoint = other.transform.root.gameObject.transform.position + Vector3.up;
         EventManager.Send(onImpact);
         component.TakeDamage(damage, gameObject);
-
     }
 }
