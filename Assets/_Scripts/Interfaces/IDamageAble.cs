@@ -1,8 +1,13 @@
+using Data;
 using UnityEngine;
 
-public interface IDamageAble
+namespace Interfaces
 {
-    public bool IsDead { get; }
-    public void TakeDamage(int damage, GameObject targetCausedDamage);
-
+	public interface IDamageAble
+	{
+		bool IsDead { get; }
+		Vector3 Position { get; }
+		void TakeDamage(int damage);
+		void HandleImpact(ImpactData impactData);
+	}
 }
