@@ -1,40 +1,42 @@
+using Enums;
+using Interfaces;
 using UnityEngine;
 
-public class AIMeleeChaseState : IAIState
+namespace AI.State_Machine.States
 {
-	public void Enter(BaseAIAgent agent)
+	public class AIMeleeChaseState : IAIState
 	{
-	//	agent.NavMeshAgent.isStopped = false;
-		agent.Animator.CrossFade("Blend Tree", 0.1f);
-	}
-
-	public void Exit(BaseAIAgent agent)
-	{
-	}
-
-	public AIStateID GetStateID()
-	{
-		return AIStateID.ChasePlayer;
-	}
-
-	public void Update(BaseAIAgent agent)
-	{
-		switch (agent.hasTarget)
+		public void Enter(BaseAIAgent agent)
 		{
-			case true when
-				Vector3.Distance(agent.transform.position, agent.player.transform.position) <= agent.Config.AttackDistance:
-				agent.StateMachine.ChangeState(AIStateID.MeleeAttack);
-				break;
-			case false:
-				agent.StateMachine.ChangeState(AIStateID.Idle);
-				return;
+			agent.Animator.CrossFade("Blend Tree", 0.1f);
 		}
 
-		if (agent.hasTarget)
+		public void Exit(BaseAIAgent agent)
 		{
-			agent.transform.position = Vector3.MoveTowards(agent.transform.position, agent.player.transform.position,
-				agent.Config.Speed * Time.deltaTime);
-			agent.transform.LookAt(agent.player);
+		}
+
+		public AIState GetStateID()
+		{
+			return AIState.CHASE_PLAYER;
+		}
+
+		public void Update(BaseAIAgent agent)
+		{
+			switch (agent.hasTarget)
+			{
+				case true when
+					Vector3.Distance(agent.transform.position, agent.playerTransform.transform.position) <= agent.configSO.AttackDistance:
+					agent.StateMachine.ChangeState(AIState.MELEE_ATTACK);
+					break;
+				case false:
+					agent.StateMachine.ChangeState(AIState.IDLE);
+					return;
+			}
+			if (!agent.hasTarget) return;
+
+			agent.transform.position = Vector3.MoveTowards(agent.transform.position, agent.playerTransform.transform.position,
+														   agent.configSO.Speed * Time.deltaTime);
+			agent.transform.LookAt(agent.playerTransform);
 		}
 	}
 }

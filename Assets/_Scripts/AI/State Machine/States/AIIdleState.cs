@@ -1,23 +1,28 @@
-using UnityEngine;
+using Enums;
+using Interfaces;
 
-public class AIIdleState : IAIState
+namespace AI.State_Machine.States
 {
-    public void Enter(BaseAIAgent agent)
+    public class AIIdleState : IAIState
     {
-    }
+        public void Enter(BaseAIAgent agent)
+        {
+        }
 
-    public void Exit(BaseAIAgent agent)
-    {
-    }
+        public void Exit(BaseAIAgent agent)
+        {
+        }
 
-    public AIStateID GetStateID()
-    {
-        return AIStateID.Idle;
-    }
+        public AIState GetStateID()
+        {
+            return AIState.IDLE;
+        }
 
-    public void Update(BaseAIAgent agent)
-    {
-        if (!agent.hasTarget) return;
-        agent.StateMachine.ChangeState(AIStateID.ChasePlayer);
+        public void Update(BaseAIAgent agent)
+        {
+            if (!agent.hasTarget)
+                return;
+            agent.StateMachine.ChangeState(AIState.CHASE_PLAYER);
+        }
     }
 }

@@ -1,81 +1,82 @@
+using Enums;
+using Interfaces;
 using UnityEngine;
 
-public class AIMeleeAttackState : IAIState
+namespace AI.State_Machine.States
 {
-    public void Enter(BaseAIAgent agent)
+    public class AIMeleeAttackState : IAIState
     {
-    }
-
-    public void Exit(BaseAIAgent agent)
-    {
-        agent.IsAttacking = false;
-        agent.Animator.CrossFade("Blend Tree", 0.1f);
-    }
-
-    public AIStateID GetStateID()
-    {
-        return AIStateID.MeleeAttack;
-    }
-
-    public void Update(BaseAIAgent agent)
-    {
-        if (agent.IsAttacking)
+        public void Enter(BaseAIAgent agent)
         {
-            return;
         }
 
-        if (!agent.hasTarget)
+        public void Exit(BaseAIAgent agent)
         {
-            agent.StateMachine.ChangeState(AIStateID.Idle);
-
-            return;
+            agent.IsAttacking = false;
+            agent.Animator.CrossFade("Blend Tree", 0.1f);
         }
 
-        if (!agent.player.TryGetComponent<IDamageAble>(out var status) || status.IsDead)
+        public AIState GetStateID()
         {
-            agent.player=null;
-            agent.hasTarget=false;
-            agent.StateMachine.ChangeState(AIStateID.Idle);
-
-            return;
+            return AIState.MELEE_ATTACK;
         }
 
-        if (agent.hasTarget && Vector3.Distance(agent.transform.position, agent.player.transform.position) > agent.Config.AttackDistance)
+        public void Update(BaseAIAgent agent)
         {
-            agent.StateMachine.ChangeState(AIStateID.ChasePlayer);
+            if (agent.IsAttacking)
+                return;
+
+            if (!agent.hasTarget)
+            {
+                agent.StateMachine.ChangeState(AIState.IDLE);
+                return;
+            }
+
+            if (!agent.playerTransform.TryGetComponent<IDamageAble>(out var status) || status.IsDead)
+            {
+                agent.playerTransform=null;
+                agent.hasTarget=false;
+                agent.StateMachine.ChangeState(AIState.IDLE);
+                return;
+            }
+
+            if (agent.hasTarget && Vector3.Distance(agent.transform.position, agent.playerTransform.transform.position) > agent.configSO.AttackDistance)
+            {
+                agent.StateMachine.ChangeState(AIState.CHASE_PLAYER);
+            }
+            else
+            {
+                PerformAttack(agent);
+            }
         }
-        else
+
+        private void PerformAttack(BaseAIAgent agent)
         {
-            PerformAttack(agent);
+            if (agent.IsAttacking) return;
+            int a = Random.Range(0, 101);
+
+            if (a >= 50)
+            {
+                LightAttack(agent);
+            }
+            else
+            {
+                HeavyAttack(agent);
+            }
         }
-    }
 
-    private void PerformAttack(BaseAIAgent agent)
-    {
-        if (agent.IsAttacking) return;
-        int a = Random.Range(0, 101);
-
-        if (a >= 50)
+        private void LightAttack(BaseAIAgent agent)
         {
-            LightAttack(agent);
+            agent.transform.LookAt(agent.playerTransform.transform.position, Vector3.up);
+            MeleeAIAgent meleeAgent = agent as MeleeAIAgent;
+            meleeAgent.AIAttack.PerformLightMeleeAttack(agent, agent.configSO.LightDamage);
         }
-        else
+
+        private void HeavyAttack(BaseAIAgent agent)
         {
-            HeavyAttack(agent);
+            agent.transform.LookAt(agent.playerTransform.transform.position, Vector3.up);
+            MeleeAIAgent meleeAgent = agent as MeleeAIAgent;
+            meleeAgent.AIAttack.PerformHeavyMeleeAttack(agent, agent.configSO.HeavyDamage);
         }
-    }
-
-    private void LightAttack(BaseAIAgent agent)
-    {
-        agent.transform.LookAt(agent.player.transform.position, Vector3.up);
-        MeleeAIAgent meleeAgent = agent as MeleeAIAgent;
-        meleeAgent.AIAttack.PerformLightMeleeAttack(agent, agent.Config.LightDamage);
-    }
-
-    private void HeavyAttack(BaseAIAgent agent)
-    {
-        agent.transform.LookAt(agent.player.transform.position, Vector3.up);
-        MeleeAIAgent meleeAgent = agent as MeleeAIAgent;
-        meleeAgent.AIAttack.PerformHeavyMeleeAttack(agent, agent.Config.HeavyDamage);
     }
 }

@@ -1,25 +1,27 @@
+using Enums;
+using Interfaces;
+using Player;
 
-using UnityEngine;
-
-public class AIDeadState : IAIState
+namespace AI.State_Machine.States
 {
-    private static readonly int dead = Animator.StringToHash("Dead");
-
-    public void Enter(BaseAIAgent agent)
+    public class AIDeadState : IAIState
     {
-        agent.Animator.SetTrigger(dead);
-    }
+        public void Enter(BaseAIAgent agent)
+        {
+            agent.Animator.SetTrigger(AnimationHashData.Death);
+        }
 
-    public void Exit(BaseAIAgent agent)
-    {
-    }
+        public void Exit(BaseAIAgent agent)
+        {
+        }
 
-    public AIStateID GetStateID()
-    {
-        return AIStateID.Dead;
-    }
+        public AIState GetStateID()
+        {
+            return AIState.DEAD;
+        }
 
-    public void Update(BaseAIAgent agent)
-    {
+        public void Update(BaseAIAgent agent)
+        {
+        }
     }
 }

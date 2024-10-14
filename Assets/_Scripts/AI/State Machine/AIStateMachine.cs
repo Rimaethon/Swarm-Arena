@@ -1,37 +1,40 @@
+using Enums;
+using Interfaces;
 
-public class AIStateMachine
+namespace AI.State_Machine
 {
-    private readonly BaseAIAgent agent;
-    private readonly IAIState[] states;
-    public AIStateID currentStateID;
-
-    public AIStateMachine(BaseAIAgent agent)
+    public class AIStateMachine
     {
-        this.agent = agent;
-        int numberOfStates = System.Enum.GetNames(typeof(AIStateID)).Length;
-        states = new IAIState[numberOfStates];
-    }
+        private readonly BaseAIAgent agent;
+        private readonly IAIState[] states;
+        private IAIState currentState;
 
-    public void RegisterState(IAIState state)
-    {
-        int index = (int)state.GetStateID();
-        states[index] = state;
-    }
+        public AIStateMachine(BaseAIAgent agent)
+        {
+            this.agent = agent;
+            int numberOfStates = System.Enum.GetNames(typeof(AIState)).Length;
+            states = new IAIState[numberOfStates];
+        }
 
-    public void Update()
-    {
-        GetState(currentStateID)?.Update(agent);
-    }
+        public void RegisterState(IAIState state)
+        {
+            int index = (int)state.GetStateID();
+            states[index] = state;
+        }
 
-    public IAIState GetState(AIStateID stateID)
-    {
-        return states[(int)stateID];
-    }
+        public void Update()
+        {
+            currentState?.Update(agent);
+        }
 
-    public void ChangeState(AIStateID newState)
-    {
-        GetState(currentStateID)?.Exit(agent);
-        currentStateID = newState;
-        GetState(currentStateID)?.Enter(agent);
+        public void ChangeState(AIState newStateType)
+        {
+            IAIState newState= states[(int)newStateType];
+            if(currentState!=null && newState==currentState)
+                return;
+            currentState?.Exit(agent);
+            currentState = newState;
+            currentState?.Enter(agent);
+        }
     }
 }
