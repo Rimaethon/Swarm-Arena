@@ -1,64 +1,41 @@
-﻿using Data;
+﻿using System;
+using Data;
+using Enums;
 using UnityEngine;
 
-namespace Managers
+namespace Event_System
 {
-	public class OnSettingsChanged:EventBase
+	public class SettingsChangedEventArgs:EventArgs
 	{
 		public SettingsData settingsData;
 	}
 
-	public class OnPlayerDataChanged:EventBase
+	public class PlayerDataChangedEventArgs:EventArgs
 	{
 		public PlayerData playerData;
 	}
 
-	public class OnEnemyKilled:EventBase
-	{
-		public int coinAmount;
-		public int expAmount;
-		public Vector3 position;
-	}
-
-	public class OnBulletCountChanged:EventBase
+	public class BulletCountChangedEventArgs:EventArgs
 	{
 		public int bulletCount;
 	}
 
-	public class OnImpact:EventBase
+	public class EnemyDamagedEventArgs:EventArgs
 	{
-		public GameObject HitObject;
-		public Vector3 HitPoint;
-		public Vector3 HitNormal;
-		public ImpactType ImpactType;
-		public float ImpactStrength;
-	}
-
-	public class OnDamage:EventBase
-	{
-		public float Damage;
+		public EnemyType EnemyType;
 		public Vector3 Position;
+		public short Damage;
+		public bool isDead;
 	}
 
-	public class OnPlayerDamaged:EventBase
+	public class PlayerDamagedEventArgs:EventArgs
 	{
 		public int Damage;
+		public bool isDead;
 	}
 
-	public class OnPlayerDeath:EventBase
+	public class LevelEndEventArgs:EventArgs
 	{
-	}
-
-	public class OnLevelCompleted:EventBase
-	{
-	}
-
-	public class OnUpdateUI:EventBase
-	{
-		public int killCount;
-		public int coinAmount;
-		public int experience;
-		public int currentLevel;
-		public int experienceToNextLevel;
+		public bool isLevelCompleted;
 	}
 }

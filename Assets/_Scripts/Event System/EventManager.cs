@@ -2,54 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Managers
+namespace Event_System
 {
 	public static class EventManager
 	{
-		public static void RegisterHandler<TEvent>(Action<TEvent> handler) where TEvent : EventBase
+		public static void Subscribe<TEvent>(Action<TEvent> callback) where TEvent : EventArgs
 		{
-			EventHandlers<TEvent>.Register(handler);
+			EventHandlers<TEvent>.Subscribe(callback);
 		}
 
-		public static void UnregisterHandler<TEventType>(Action<TEventType> handler) where TEventType : EventBase
+		public static void UnSubscribe<TEventType>(Action<TEventType> callback) where TEventType : EventArgs
 		{
-			EventHandlers<TEventType>.Unregister(handler);
-
+			EventHandlers<TEventType>.UnSubscribe(callback);
 		}
 
-		public static void Send<TEventType>(TEventType eventData) where TEventType : EventBase, new()
+		public static void RaiseEvent<TEventType>(TEventType eventArgs) where TEventType : EventArgs, new()
 		{
-			EventHandlers<TEventType>.Handle(eventData);
+			EventHandlers<TEventType>.RaiseEvent(eventArgs);
 		}
-
-
 	}
 
-	public static class EventHandlers<TEvent> where TEvent : EventBase
+	public static class EventHandlers<TEvent> where TEvent : EventArgs
 	{
-		private static readonly List<Action<TEvent>> handlers = new List<Action<TEvent>>();
+		private static readonly List<Action<TEvent>> callbacks = new List<Action<TEvent>>();
 
-		public static void Register(Action<TEvent> handler)
+		public static void Subscribe(Action<TEvent> callback)
 		{
-			if (!handlers.Contains(handler))
+			if (!callbacks.Contains(callback))
 			{
-				handlers.Add(handler);
+				callbacks.Add(callback);
 			}
 		}
 
-		public static void Unregister(Action<TEvent> handler)
+		public static void UnSubscribe(Action<TEvent> callback)
 		{
-			if (handlers.Contains(handler))
+			if (callbacks.Contains(callback))
 			{
-				handlers.Remove(handler);
+				callbacks.Remove(callback);
 			}
 		}
 
-		public static void Handle(TEvent eventData)
+		public static void RaiseEvent(TEvent eventArgs)
 		{
-			foreach (Action<TEvent> handler in handlers.ToList())
+			foreach (Action<TEvent> callback in callbacks.ToList())
 			{
-				handler.Invoke(eventData);
+				callback.Invoke(eventArgs);
 			}
 		}
 	}
