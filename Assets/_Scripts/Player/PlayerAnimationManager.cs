@@ -1,100 +1,96 @@
-using System;
 using System.Collections;
-using Managers;
+using Event_System;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-[RequireComponent(typeof(Animator))]
-public class PlayerAnimationManager : MonoBehaviour
+namespace Player
 {
-	[Header("Animations")]
-	[SerializeField] private Rig _rifleRig;
-	[SerializeField] private Rig _twoHandedMeleeRig;
-	[SerializeField] private AnimationClip _rifleReloadingAnimation;
-	[SerializeField] private float _rifleReloadingAnimationOffset = 0.75f;
-	private Animator animator;
-	private static readonly int rifleWalk = Animator.StringToHash("RifleWalk");
-	private static readonly int defaultWalk = Animator.StringToHash("DefaultWalk");
-	private static readonly int isAiming = Animator.StringToHash("IsAiming");
-	private static readonly int rifleMediumShot = Animator.StringToHash("RifleMediumShot");
-	private static readonly int speed = Animator.StringToHash("Speed");
-	private static readonly int horizontalSpeed = Animator.StringToHash("HorizontalSpeed");
-	private static readonly int verticalSpeed = Animator.StringToHash("VerticalSpeed");
-	private PlayerController playerController;
-
-	private void Awake()
+	[RequireComponent(typeof(Animator))]
+	public class PlayerAnimationManager : MonoBehaviour
 	{
-		animator = GetComponent<Animator>();
-		playerController = GetComponent<PlayerController>();
-	}
+		[SerializeField] private Rig _rifleRig;
+		[SerializeField] private Rig _twoHandedMeleeRig;
+		[SerializeField] private AnimationClip _rifleReloadingAnimation;
+		[SerializeField] private float _rifleReloadingAnimationOffset = 0.75f;
+		private Animator animator;
+		private PlayerController playerController;
 
-	private void OnEnable()
-	{
-		EventManager.RegisterHandler<OnPlayerDeath>(HandleDeathAnimation);
-	}
+		private void Awake()
+		{
+			animator = GetComponent<Animator>();
+			playerController = GetComponent<PlayerController>();
+		}
 
-	private void OnDisable()
-	{
-		EventManager.UnregisterHandler<OnPlayerDeath>(HandleDeathAnimation);
-	}
+		private void OnEnable()
+		{
+			EventManager.Subscribe<LevelEndEventArgs>(HandleDeathAnimation);
+		}
 
-	private void HandleDeathAnimation(OnPlayerDeath obj)
-	{
-		animator.SetTrigger("Death");
-	}
+		private void OnDisable()
+		{
+			EventManager.UnSubscribe<LevelEndEventArgs>(HandleDeathAnimation);
+		}
 
-	private void Start()
-	{
-		SetWeaponAnimationPattern();
-	}
+		private void HandleDeathAnimation(LevelEndEventArgs obj)
+		{
+			if(obj.isLevelCompleted)
+				return;
+			animator.SetTrigger(AnimationHashData.Death);
+		}
 
-	private void Update()
-	{
-		UpdateAnimation();
-	}
+		private void Start()
+		{
+			SetWeaponAnimationPattern();
+		}
 
-	public void PlayRifleMediumShot()
-	{
-		animator.SetTrigger(rifleMediumShot);
-	}
+		private void Update()
+		{
+			UpdateAnimation();
+		}
 
-	public void PlayReloadAnimation(string animationName)
-	{
-		StartCoroutine(PlayRifleReloadAnimationCoroutine(animationName));
-	}
+		public void PlayRifleMediumShot()
+		{
+			animator.SetTrigger(AnimationHashData.RifleMediumShot);
+		}
 
-	private void UpdateAnimation()
-	{
-		animator.SetFloat(speed, playerController.moveDirection.magnitude, 0.05f, Time.deltaTime);
-		animator.SetFloat(horizontalSpeed, playerController.HorizontalSpeed, 0.02f, Time.deltaTime);
-		animator.SetFloat(verticalSpeed, playerController.VerticalSpeed, 0.02f, Time.deltaTime);
-	}
+		public void PlayReloadAnimation(string animationName)
+		{
+			StartCoroutine(PlayRifleReloadAnimationCoroutine(animationName));
+		}
 
-	private void SetWeaponAnimationPattern()
-	{
-		SetRifleRig();
-		animator.ResetTrigger(defaultWalk);
-		animator.SetTrigger(rifleWalk);
-		animator.SetBool(isAiming, true);
-	}
+		private void UpdateAnimation()
+		{
+			animator.SetFloat(AnimationHashData.Speed, playerController.moveDirection.magnitude, 0.05f, Time.deltaTime);
+			animator.SetFloat(AnimationHashData.HorizontalSpeed, playerController.HorizontalSpeed, 0.02f, Time.deltaTime);
+			animator.SetFloat(AnimationHashData.VerticalSpeed, playerController.VerticalSpeed, 0.02f, Time.deltaTime);
+		}
 
-	private IEnumerator PlayRifleReloadAnimationCoroutine(string animationName)
-	{
-		SetDefaultRig();
-		animator.CrossFade(animationName, 0.1f);
-		yield return new WaitForSeconds(_rifleReloadingAnimation.length - _rifleReloadingAnimationOffset);
-		SetRifleRig();
-	}
+		private void SetWeaponAnimationPattern()
+		{
+			SetRifleRig();
+			animator.ResetTrigger(AnimationHashData.DefaultWalk);
+			animator.SetTrigger(AnimationHashData.RifleWalk);
+			animator.SetBool(AnimationHashData.IsAiming, true);
+		}
 
-	private void SetRifleRig()
-	{
-		_twoHandedMeleeRig.weight = 0f;
-		_rifleRig.weight = 1f;
-	}
+		private IEnumerator PlayRifleReloadAnimationCoroutine(string animationName)
+		{
+			SetDefaultRig();
+			animator.CrossFade(animationName, 0.1f);
+			yield return new WaitForSeconds(_rifleReloadingAnimation.length - _rifleReloadingAnimationOffset);
+			SetRifleRig();
+		}
 
-	private void SetDefaultRig()
-	{
-		_twoHandedMeleeRig.weight = 0f;
-		_rifleRig.weight = 0f;
+		private void SetRifleRig()
+		{
+			_twoHandedMeleeRig.weight = 0f;
+			_rifleRig.weight = 1f;
+		}
+
+		private void SetDefaultRig()
+		{
+			_twoHandedMeleeRig.weight = 0f;
+			_rifleRig.weight = 0f;
+		}
 	}
 }
