@@ -1,151 +1,149 @@
 using System.Collections;
-using _Scripts.Player.Weapons;
 using Data;
+using Enums;
+using Event_System;
+using Interfaces;
 using Managers;
+using Scriptable_Objects;
 using UnityEngine;
 using UnityEngine.Pool;
 
-[RequireComponent(typeof(AudioSource))]
-public class RangeWeapon : MonoBehaviour, IRangeWeapon, IWeapon
+namespace Player.Weapons
 {
-	[Header("Weapon options")]
-	[SerializeField] protected WeaponDataSO weaponDataSO;
-	[SerializeField] protected GameObject burrel;
-	[SerializeField] protected ParticleSystem muzzleFlash;
-	protected PlayerAnimationManager playerAnimationManager;
-	protected ObjectPool<TrailRenderer> trailRendererPool;
-	private PlayerData playerData;
-	private readonly OnBulletCountChanged onBulletCountChanged = new OnBulletCountChanged();
-	protected readonly OnImpact onImpact = new OnImpact();
-	private readonly OnDamage onDamage = new OnDamage();
-	protected int bullets;
-	private int damage;
-	private int fireRate;
-	private int magazineSize;
-	private float lastShotTime;
-
-	protected virtual void Awake()
+	[RequireComponent(typeof(AudioSource))]
+	public class RangeWeapon : MonoBehaviour, IWeapon
 	{
-		trailRendererPool = new ObjectPool<TrailRenderer>(CreateTrail);
-		playerData= SaveManager.Instance.GetPlayerData();
-		onImpact.ImpactType = ImpactType.SHOT;
-	}
+		public float Range => range;
+		[SerializeField] protected WeaponDataSO weaponDataSO;
+		[SerializeField] protected Transform gunBarrel;
+		[SerializeField] protected ParticleSystem muzzleFlash;
+		[SerializeField] protected float range=15;
+		private PlayerAnimationManager playerAnimationManager;
+		private ObjectPool<TrailRenderer> trailRendererPool;
+		private EnemyDetector enemyDetector;
+		private const float reload_time = 3;
+		private float lastShotTime;
+		private int bullets;
+		private int damage;
+		private int fireRate;
+		private int magazineSize;
 
-	public void InitializeWeapon(WeaponDataSO weaponData)
-	{
-		damage = InitializeValues(ItemAttributeTypes.DAMAGE);
-		magazineSize = InitializeValues(ItemAttributeTypes.MAGAZINE_SIZE);
-		fireRate =InitializeValues(ItemAttributeTypes.FIRE_RATE);
-		bullets = magazineSize;
-		onDamage.Damage = damage;
-	}
-
-	private int InitializeValues(ItemAttributeTypes attributeType)
-	{
-		int level = playerData.playerTalents[weaponDataSO.itemID].talentLevels[attributeType];
-		ItemAttribute attribute = weaponDataSO._itemAttributes[attributeType];
-		return (int)(((attribute.maxValue - attribute.baseValue) / attribute.maxLevel) * level + attribute.baseValue);
-	}
-
-	public void Construct(PlayerAnimationManager playerAnimationManager)
-	{
-		this.playerAnimationManager = playerAnimationManager;
-	}
-
-
-	public void PerformShot()
-	{
-		if (lastShotTime > 0)
+		public void InitializeWeapon(WeaponDataSO weaponData,EnemyDetector enemyDetector, PlayerAnimationManager playerAnimationManager)
 		{
-			lastShotTime -= Time.deltaTime;
-			return;
+			this.playerAnimationManager = playerAnimationManager;
+			trailRendererPool = new ObjectPool<TrailRenderer>(CreateTrail);
+			damage = InitializeValues(ItemAttributeTypes.DAMAGE);
+			magazineSize = InitializeValues(ItemAttributeTypes.MAGAZINE_SIZE);
+			fireRate =InitializeValues(ItemAttributeTypes.FIRE_RATE);
+			bullets = magazineSize;
+			this.enemyDetector = enemyDetector;
 		}
 
-		if (bullets == 0)
+		private int InitializeValues(ItemAttributeTypes attributeType)
 		{
-			PerformReload(playerAnimationManager);
-			return;
+			int level = SaveManager.Instance.GetPlayerData().playerTalents[weaponDataSO.itemID].talentLevels[attributeType];
+			ItemAttribute attribute = weaponDataSO._itemAttributes[attributeType];
+			return (int)(((attribute.maxValue - attribute.baseValue) / attribute.maxLevel) * level + attribute.baseValue);
 		}
 
-		lastShotTime=(float)60/fireRate;
-		ShotLogic();
-	}
-
-	protected void ShotLogic()
-	{
-		Ray ray = new Ray(burrel.transform.position, burrel.transform.forward);
-		bool raycast = Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Enemy"));
-		if (!raycast) return;
-		IDamageAble damageable = hit.collider.GetComponent<IDamageAble>();
-		if (damageable is not { IsDead: false }) return;
-		AudioManager.Instance.PlaySFX(SFXClips.AK47ShotSound);
-		playerAnimationManager.PlayRifleMediumShot();
-		bullets--;
-		onBulletCountChanged.bulletCount= bullets;
-		EventManager.Send(onBulletCountChanged);
-		damageable.TakeDamage(damage, transform.root.gameObject);
-		onDamage.Position = hit.point;
-		EventManager.Send(onDamage);
-		StartCoroutine(PlayTrail(burrel.transform.position, hit.point, hit));
-	}
-
-	protected virtual IEnumerator PlayTrail(Vector3 startPoint, Vector3 endPoint, RaycastHit hit)
-	{
-		muzzleFlash.Play();
-		TrailRenderer instance = trailRendererPool.Get();
-		instance.gameObject.SetActive(true);
-		instance.transform.position = startPoint;
-		yield return null;
-		instance.emitting = true;
-		float distance = Vector3.Distance(startPoint, endPoint);
-		float remainingDistance = distance;
-
-		while (remainingDistance > 0)
+		public void TryGiveDamage()
 		{
-			instance.transform.position = Vector3.Lerp(startPoint, endPoint,
-				Mathf.Clamp01(1 - (remainingDistance / distance)));
-			remainingDistance -= weaponDataSO.TrailRenderer.SimulationSpeed * Time.deltaTime;
+			if (lastShotTime > 0)
+			{
+				lastShotTime -= Time.deltaTime;
+				return;
+			}
 
-			yield return null;
-		}
-		instance.transform.position = endPoint;
-		if (hit.collider != null)
-		{
-			onImpact.HitObject = hit.transform.gameObject;
-			onImpact.HitPoint = hit.point;
-			onImpact.HitNormal = hit.normal;
-			EventManager.Send(onImpact);
+			if (bullets == 0)
+			{
+				PerformReload(playerAnimationManager);
+				return;
+			}
+
+			lastShotTime=(float)60/fireRate;
+			ShotLogic();
 		}
 
-		yield return new WaitForSeconds(weaponDataSO.TrailRenderer.Duration);
-		yield return null;
+		private void ShotLogic()
+		{
+			if(enemyDetector.Size==0)
+				return;
 
-		instance.emitting = false;
-		instance.gameObject.SetActive(false);
-		trailRendererPool.Release(instance);
+			IDamageAble damageable = enemyDetector.damageAbles[0];
+			float distance = Vector3.Distance(damageable.Position, gunBarrel.transform.position);
+			if(damageable.IsDead || distance>range)
+				return;
+
+			Vector3 normalizedDirection = Vector3.Normalize(damageable.Position - gunBarrel.transform.position);
+			Vector3 forward = gunBarrel.transform.forward;
+			if( distance>1.5f && Vector3.Dot(normalizedDirection, forward) < 0.5f)
+				return;
+
+			AudioManager.Instance.PlaySFX(SFXClips.AK47ShotSound);
+			playerAnimationManager.PlayRifleMediumShot();
+			bullets--;
+			BulletCountChangedEventArgs bulletCountChangedEventArgs = new BulletCountChangedEventArgs
+			{
+				bulletCount = bullets,
+			};
+			EventManager.RaiseEvent(bulletCountChangedEventArgs);
+			damageable.TakeDamage(damage);
+			StartCoroutine(PlayTrail(damageable));
+		}
+
+		private IEnumerator PlayTrail(IDamageAble damageAble)
+		{
+			muzzleFlash.Play();
+			Vector3 startPoint = gunBarrel.transform.position;
+			Vector3 endPoint = damageAble.Position;
+			TrailRenderer trailRenderer = trailRendererPool.Get();
+			trailRenderer.gameObject.SetActive(true);
+			trailRenderer.transform.position =startPoint;
+			trailRenderer.emitting = true;
+			float distance = Vector3.Distance(startPoint, endPoint);
+			float remainingDistance = distance;
+
+			while (remainingDistance > 0)
+			{
+				trailRenderer.transform.position = Vector3.Lerp(startPoint, endPoint,
+																Mathf.Clamp01(1 - (remainingDistance / distance)));
+				remainingDistance -= weaponDataSO.TrailRenderer.SimulationSpeed * Time.deltaTime;
+
+				yield return null;
+			}
+			trailRenderer.transform.position = endPoint;
+			damageAble.HandleImpact(new ImpactData
+			{
+				HitPoint = endPoint,
+				HitNormal = endPoint - startPoint,
+				ImpactType = ImpactType.KNOCK_BACK,
+			});
+			yield return new WaitForSeconds(weaponDataSO.TrailRenderer.Duration);
+			trailRenderer.emitting = false;
+			trailRenderer.gameObject.SetActive(false);
+			trailRendererPool.Release(trailRenderer);
+		}
+
+		private void PerformReload(PlayerAnimationManager playerAnimation)
+		{
+			lastShotTime = reload_time;
+			bullets = magazineSize;
+			playerAnimation.PlayReloadAnimation(weaponDataSO.reloadAnimation.name);
+			AudioManager.Instance.PlaySFX(SFXClips.AK47ReloadSound);
+		}
+
+		private TrailRenderer CreateTrail()
+		{
+			GameObject instance = new GameObject("Bullet Trail");
+			TrailRenderer trail = instance.AddComponent<TrailRenderer>();
+			trail.colorGradient = weaponDataSO.TrailRenderer.Color;
+			trail.material = weaponDataSO.TrailRenderer.Material;
+			trail.widthCurve = weaponDataSO.TrailRenderer.widthCurve;
+			trail.time = weaponDataSO.TrailRenderer.Duration;
+			trail.minVertexDistance = weaponDataSO.TrailRenderer.MinVertexDistance;
+			trail.emitting = false;
+			trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+			return trail;
+		}
 	}
-
-	public void PerformReload(PlayerAnimationManager playerAnimation)
-	{
-		lastShotTime = 3;
-		bullets = magazineSize;
-		playerAnimation.PlayReloadAnimation(weaponDataSO.reloadAnimation.name);
-		AudioManager.Instance.PlaySFX(SFXClips.AK47ReloadSound);
-	}
-
-	protected virtual TrailRenderer CreateTrail()
-	{
-		GameObject instance = new GameObject("Bullet Trail");
-		TrailRenderer trail = instance.AddComponent<TrailRenderer>();
-		trail.colorGradient = weaponDataSO.TrailRenderer.Color;
-		trail.material = weaponDataSO.TrailRenderer.Material;
-		trail.widthCurve = weaponDataSO.TrailRenderer.widthCurve;
-		trail.time = weaponDataSO.TrailRenderer.Duration;
-		trail.minVertexDistance = weaponDataSO.TrailRenderer.MinVertexDistance;
-		trail.emitting = false;
-		trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-		return trail;
-	}
-
-
 }

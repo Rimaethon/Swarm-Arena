@@ -1,37 +1,41 @@
-using _Scripts.Player.Weapons;
-using Data;
-using Managers;
+using Enums;
+using Interfaces;
+using Scriptable_Objects;
 using UnityEngine;
 
-public class RadiantField : MonoBehaviour, IWeapon
+namespace Player.Weapons
 {
-	private int damage;
-	private float range;
-	private float cooldown;
-	private float timer;
-	private readonly OnDamage onDamage = new OnDamage();
-
-	public void InitializeWeapon(WeaponDataSO weaponData)
+	public class RadiantField : MonoBehaviour, IWeapon
 	{
-		damage = (int)weaponData._itemAttributes[ItemAttributeTypes.DAMAGE].baseValue;
-		range = weaponData._itemAttributes[ItemAttributeTypes.RANGE].baseValue;
-		cooldown = weaponData._itemAttributes[ItemAttributeTypes.COOLDOWN].baseValue;
-		transform.localScale = new Vector3(range, 0.01f, range);
-		onDamage.Damage = damage;
-	}
+		public float Range => range;
+		private int damage;
+		private float range;
+		private float cooldown;
+		private float timer;
+		private EnemyDetector enemyDetector;
 
-	private void FixedUpdate()
-	{
-		timer -= Time.fixedDeltaTime;
-	}
+		public void InitializeWeapon(WeaponDataSO weaponData,EnemyDetector enemyDetector, PlayerAnimationManager playerAnimationManager)
+		{
+			damage = (int)weaponData._itemAttributes[ItemAttributeTypes.DAMAGE].baseValue;
+			range = weaponData._itemAttributes[ItemAttributeTypes.RANGE].baseValue;
+			cooldown = weaponData._itemAttributes[ItemAttributeTypes.COOLDOWN].baseValue;
+			transform.localScale = new Vector3(range*2, 0.01f, range*2);
+			this.enemyDetector=enemyDetector;
+		}
 
-	private void OnTriggerStay(Collider other)
-	{
-		if(timer > 0) return;
-		IDamageAble damageable = other.GetComponent<IDamageAble>();
-		damageable?.TakeDamage(damage, gameObject);
-		onDamage.Position = other.transform.position;
-		EventManager.Send(onDamage);
-		timer = cooldown;
+		public void TryGiveDamage()
+		{
+			timer -= Time.fixedDeltaTime;
+			if(timer > 0)
+				return;
+
+			for(int i=0;i<enemyDetector.Size;i++)
+			{
+				if(Vector3.Distance(enemyDetector.damageAbles[i].Position,transform.position)>range)
+					break;
+				enemyDetector.damageAbles[i]?.TakeDamage(damage);
+			}
+			timer = cooldown;
+		}
 	}
 }
