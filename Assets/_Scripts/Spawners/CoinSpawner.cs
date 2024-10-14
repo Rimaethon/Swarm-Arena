@@ -1,16 +1,22 @@
 ﻿using System.Collections;
 using DG.Tweening;
+using Event_System;
+using Managers;
+using Object_Pool;
+using Player;
 using UnityEngine;
 
-namespace Managers
+namespace Spawners
 {
+	//Also it can give different things based on the enemy type in the future like health, ammo etc.That would make it more like a DropSpawner class
 	public class CoinSpawner:MonoBehaviour
 	{
 		[SerializeField] private GoldCoin coinPrefab;
+		[SerializeField] private AnimationCurve coinSpeedCurve;
 		private ObjectPool coinPool;
 		private Transform playerTransform;
-		private const float min_speed = 25;
-		private const float max_speed = 80;
+		private const float max_speed = 10;
+		private const float coin_start_y = 0.75f;
 		private readonly WaitForSeconds animationWaitForSeconds= new WaitForSeconds(3.5f);
 
 		private void Awake()
@@ -21,33 +27,37 @@ namespace Managers
 
 		private void OnEnable()
 		{
-			EventManager.RegisterHandler<OnEnemyKilled>(SpawnCoin);
+			EventManager.Subscribe<EnemyDamagedEventArgs>(SpawnCoin);
 		}
 
 		private void OnDisable()
 		{
-			EventManager.UnregisterHandler<OnEnemyKilled>(SpawnCoin);
+			EventManager.UnSubscribe<EnemyDamagedEventArgs>(SpawnCoin);
 		}
 
-		private void SpawnCoin(OnEnemyKilled data)
+		private void SpawnCoin(EnemyDamagedEventArgs data)
 		{
-			PoolAbleObject coin = coinPool.GetObject(data.position , Quaternion.identity);
+			if(!data.isDead)
+				return;
+			PoolAbleObject coin = coinPool.GetObject(new Vector3(data.Position.x,coin_start_y,data.Position.z) , Quaternion.identity);
 			coin.transform.rotation = Quaternion.Euler(90, 0, 0);
 			StartCoroutine(CoinAnimation(playerTransform, coin));
 		}
 
 		private IEnumerator CoinAnimation(Transform playerTransform,PoolAbleObject coin)
 		{
-			coin.transform.DOMoveY(coin.transform.position.y +0.5f, 3.5f).SetLoops(1, LoopType.Yoyo);
+			Vector3 coinPosition = coin.transform.position;
+			coin.transform.DOMoveY(coinPosition.y +0.5f, 3.5f).SetLoops(1, LoopType.Yoyo);
 			coin.transform.DORotate(new Vector3(90, 720, 0), 3.5f, RotateMode.FastBeyond360).SetLoops(1, LoopType.Restart);
 			yield return animationWaitForSeconds;
 
-			float distance = Vector3.Distance(coin.transform.position, playerTransform.position);
-			while ( distance > 0.2f)
+			float time = Time.deltaTime;
+			while (Vector3.Distance(coinPosition, playerTransform.position) > 0.2f)
 			{
-				float speed = Mathf.Clamp(distance, min_speed, max_speed)*Time.deltaTime;
-				coin.transform.position = Vector3.MoveTowards(coin.transform.position, playerTransform.position, speed);
-				distance = Vector3.Distance(coin.transform.position, playerTransform.position);
+				float speed = coinSpeedCurve.Evaluate(time)*max_speed;
+				time += Time.deltaTime;
+				coinPosition= Vector3.MoveTowards(coin.transform.position, playerTransform.position, speed);
+				coin.transform.position = coinPosition;
 				yield return null;
 			}
 			coin.gameObject.SetActive(false);
