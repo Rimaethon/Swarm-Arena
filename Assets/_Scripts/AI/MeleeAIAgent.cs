@@ -1,22 +1,26 @@
+using AI.State_Machine.States;
+using Enums;
+using Interfaces;
 
-public class MeleeAIAgent : BaseAIAgent
+namespace AI
 {
-    public IAIMeleeAttack AIAttack { get; private set; }
+	public class MeleeAIAgent : BaseAIAgent
+	{
+		public IAIMeleeAttack AIAttack { get; private set; }
 
-    public override void Awake()
-    {
-        base.Awake();
+		protected override void Awake()
+		{
+			base.Awake();
+			AIAttack = GetComponent<IAIMeleeAttack>();
+		}
 
-        AIAttack = GetComponent<IAIMeleeAttack>();
-    }
-
-    public override void Start()
-    {
-        base.Start();
-        StateMachine.RegisterState(new AIMeleeChaseState());
-        StateMachine.RegisterState(new AIIdleState());
-        StateMachine.RegisterState(new AIMeleeAttackState());
-        StateMachine.ChangeState(InitialStateID);
-    }
-
+		protected override void Start()
+		{
+			base.Start();
+			StateMachine.RegisterState(new AIMeleeChaseState());
+			StateMachine.RegisterState(new AIIdleState());
+			StateMachine.RegisterState(new AIMeleeAttackState());
+			StateMachine.ChangeState(AIState.IDLE);
+		}
+	}
 }
