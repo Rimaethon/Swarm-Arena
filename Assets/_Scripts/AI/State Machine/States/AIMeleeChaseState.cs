@@ -32,10 +32,12 @@ namespace AI.State_Machine.States
 					agent.StateMachine.ChangeState(AIState.IDLE);
 					return;
 			}
+
 			if (!agent.hasTarget) return;
 
 			agent.transform.position = Vector3.MoveTowards(agent.transform.position, agent.playerTransform.transform.position,
 														   agent.configSO.Speed * Time.deltaTime);
+
 			agent.transform.LookAt(agent.playerTransform);
 		}
 	}
