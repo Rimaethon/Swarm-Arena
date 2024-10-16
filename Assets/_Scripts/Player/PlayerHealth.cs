@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Player
 {
-	public class PlayerHealth :MonoBehaviour,IDamageAble
+	public class PlayerHealth : MonoBehaviour, IDamageAble
 	{
-		public bool IsDead => playerHealth<=0;
+		public bool IsDead => playerHealth <= 0;
 		public Vector3 Position => transform.position;
 		private int playerHealth;
 
@@ -19,14 +19,16 @@ namespace Player
 
 		public void TakeDamage(int damage)
 		{
-			if(IsDead)
+			if (IsDead)
 				return;
+
 			playerHealth -= damage;
-			PlayerDamagedEventArgs playerDamagedEventArgs=new PlayerDamagedEventArgs
+			PlayerDamagedEventArgs playerDamagedEventArgs = new PlayerDamagedEventArgs
 			{
 				Damage = damage,
 				isDead = IsDead
 			};
+
 			EventManager.RaiseEvent(playerDamagedEventArgs);
 		}
 
