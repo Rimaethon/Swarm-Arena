@@ -1,38 +1,39 @@
-using Managers;
+using Event_System;
+using Player;
+using UI.Buttons;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace Managers
 {
-    [SerializeField] Joystick _joystick;
-    private PlayerController playerController;
-    private void Awake()
-    {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-    }
+	public class InputManager : MonoBehaviour
+	{
+		[SerializeField]
+		private Joystick _joystick;
+		private PlayerController playerController;
 
-    private void OnEnable()
-    {
-        EventManager.RegisterHandler<OnPlayerDeath>(HandlePlayerDeath);
-        EventManager.RegisterHandler<OnLevelCompleted>(HandleLevelCompleted);
-    }
+		private void Awake()
+		{
+			playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+		}
 
-    private void OnDisable()
-    {
-        EventManager.UnregisterHandler<OnPlayerDeath>(HandlePlayerDeath);
-        EventManager.UnregisterHandler<OnLevelCompleted>(HandleLevelCompleted);
-    }
+		private void FixedUpdate()
+		{
+			playerController.moveDirection = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
+		}
 
-    private void HandlePlayerDeath(OnPlayerDeath data)
-    {
-        _joystick.gameObject.SetActive(false);
-    }
-    private void HandleLevelCompleted(OnLevelCompleted data)
-    {
-        _joystick.gameObject.SetActive(false);
-    }
+		private void OnEnable()
+		{
+			EventManager.Subscribe<LevelEndEventArgs>(HandlePlayerDeath);
+		}
 
-    private void FixedUpdate()
-    {
-        playerController.moveDirection = new Vector3(_joystick.Direction.x, 0, _joystick.Direction.y);
-    }
+		private void OnDisable()
+		{
+			EventManager.UnSubscribe<LevelEndEventArgs>(HandlePlayerDeath);
+		}
+
+		private void HandlePlayerDeath(LevelEndEventArgs data)
+		{
+			_joystick.gameObject.SetActive(false);
+		}
+	}
 }

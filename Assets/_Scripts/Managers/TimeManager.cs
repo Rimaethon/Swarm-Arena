@@ -1,60 +1,58 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Interfaces;
+using UnityEngine;
+using Utility;
 
 namespace Managers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using Rimaethon.Scripts.Utility;
-	using UnityEngine;
-	using System.Threading;
-
-	namespace _Scripts.Managers
+	public class TimeManager : PersistentSingleton<TimeManager>
 	{
-		public class TimeManager:PersistentSingleton<TimeManager>
+		private CancellationTokenSource cancellationTokenSource;
+		private long currentTime;
+		private int numberOfTimeDependentObjects;
+		private List<ITimeDependent> timeDependentObjects = new List<ITimeDependent>();
+
+		private void Start()
 		{
-			private List<ITimeDependent> timeDependentObjects = new List<ITimeDependent>();
-			private int numberOfTimeDependentObjects;
-			private long currentTime;
-			private CancellationTokenSource cancellationTokenSource;
+			Application.targetFrameRate = 60;
+			timeDependentObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITimeDependent>().ToList();
+			currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+			numberOfTimeDependentObjects = timeDependentObjects.Count;
+			cancellationTokenSource = new CancellationTokenSource();
+			TikTak(cancellationTokenSource.Token);
+		}
 
-			private void Start()
-			{
-				Application.targetFrameRate = 60;
-				timeDependentObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITimeDependent>().ToList();
-				currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-				numberOfTimeDependentObjects = timeDependentObjects.Count;
-				cancellationTokenSource = new CancellationTokenSource();
-				TikTak(cancellationTokenSource.Token);
-			}
+		private void OnDisable()
+		{
+			cancellationTokenSource?.Cancel();
+		}
 
-			private void OnDisable()
+		private async void TikTak(CancellationToken cancellationToken)
+		{
+			try
 			{
-				cancellationTokenSource?.Cancel();
-			}
-
-			private async void TikTak(CancellationToken cancellationToken)
-			{
-				try
+				while (!cancellationToken.IsCancellationRequested)
 				{
-					while (!cancellationToken.IsCancellationRequested)
+					timeDependentObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITimeDependent>().ToList();
+					numberOfTimeDependentObjects = timeDependentObjects.Count;
+
+					currentTime++;
+
+					for (int i = 0; i < numberOfTimeDependentObjects; i++)
 					{
-						timeDependentObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITimeDependent>().ToList();
-						numberOfTimeDependentObjects = timeDependentObjects.Count;
-
-						currentTime++;
-						for (int i = 0; i < numberOfTimeDependentObjects; i++)
-						{
-							timeDependentObjects[i].OnTimeUpdate(currentTime);
-						}
-						await Task.Delay(1000, cancellationToken: cancellationToken);
+						timeDependentObjects[i].OnTimeUpdate(currentTime);
 					}
+
+					await Task.Delay(1000, cancellationToken);
 				}
-				catch (TaskCanceledException)
-				{
-				}
+			}
+			catch (TaskCanceledException)
+			{
 			}
 		}
 	}
-
 }
