@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using Rimaethon.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utility;
 
 namespace Managers
 {
@@ -9,15 +9,18 @@ namespace Managers
 	{
 		private Canvas loadingCanvas;
 
-
 		protected override void Awake()
 		{
 			base.Awake();
 			loadingCanvas = GetComponentInChildren<Canvas>();
-			LoadScene(1);
+
+			if (SceneManager.GetActiveScene().buildIndex == 0)
+			{
+				LoadScene(1);
+			}
 		}
 
-		private IEnumerator  LoadSceneAsync(int sceneIndex = 1)
+		private IEnumerator LoadSceneAsync(int sceneIndex = 1)
 		{
 			loadingCanvas.enabled = true;
 			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex);
