@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Enums;
+using Scriptable_Objects;
 
 namespace Data
 {
@@ -19,7 +20,7 @@ namespace Data
 		public int playerHealth;
 		public int upgradeCost;
 		public int upgradeCount;
-		public Dictionary<int,TalentData> playerTalents;
+		public Dictionary<int, TalentData> playerTalents;
 
 		public PlayerData(WeaponDatabaseSO weaponDatabaseSO)
 		{
@@ -37,32 +38,22 @@ namespace Data
 			upgradeCount = 0;
 			playerTalents = new Dictionary<int, TalentData>();
 
-
-			foreach (KeyValuePair<int, WeaponDataSO> variable in weaponDatabaseSO.items)
+			foreach (KeyValuePair<int, WeaponDataSO> weaponData in weaponDatabaseSO.items)
 			{
 				TalentData talentData = new TalentData();
-				if (!variable.Value.isLocked)
+
+				if (!weaponData.Value.isLocked)
 				{
 					talentData.isUnlocked = true;
 				}
-				playerTalents.Add(variable.Key,talentData);
-				foreach (KeyValuePair<ItemAttributeTypes, ItemAttribute> VARIABLE2 in variable.Value._itemAttributes)
+
+				playerTalents.Add(weaponData.Key, talentData);
+
+				foreach (KeyValuePair<ItemAttributeTypes, ItemAttributeData> attributeType in weaponData.Value._itemAttributes)
 				{
-					playerTalents[variable.Key].talentLevels.Add(VARIABLE2.Key,0);
+					playerTalents[weaponData.Key].talentLevels.Add(attributeType.Key, 0);
 				}
 			}
-
-		}
-	}
-
-	[Serializable]
-	public class TalentData
-	{
-		public bool isUnlocked;
-		public Dictionary<ItemAttributeTypes, int> talentLevels;
-		public TalentData()
-		{
-			talentLevels = new Dictionary<ItemAttributeTypes, int>();
 		}
 	}
 }

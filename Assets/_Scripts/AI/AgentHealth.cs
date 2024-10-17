@@ -35,16 +35,13 @@ namespace DamageAble
 			{
 				return;
 			}
-
 			characterHealth -= damage;
-
 			//Needs pooling since it generates a lot of garbage and it is called multiple times every frame
 			enemyDamagedEventArgs.EnemyType = EnemyType.NORMAL_ZOMBIE;
 			enemyDamagedEventArgs.Damage = damage;
 			enemyDamagedEventArgs.Position = transform.position;
 			enemyDamagedEventArgs.isDead = IsDead;
 			EventManager.RaiseEvent(enemyDamagedEventArgs);
-
 			if (IsDead)
 			{
 				agent.SetDeadState();
@@ -53,7 +50,7 @@ namespace DamageAble
 
 		public void HandleImpact(ImpactData impactData)
 		{
-			ObjectPool particlePool = ObjectPool.CreateInstance(agent.configSO.impactSOData.EffectPrefab, 10);
+			ObjectPool particlePool = ObjectPoolManager.CreateInstance(agent.configSO.impactSOData.EffectPrefab, 10);
 			PoolAbleObject instance = particlePool.GetObject(impactData.HitPoint + impactData.HitNormal * 0.001f, Quaternion.LookRotation(impactData.HitNormal));
 			instance.transform.forward = impactData.HitNormal;
 		}

@@ -1,5 +1,4 @@
-﻿
-namespace Data
+﻿namespace Data
 {
 	public class SettingsData
 	{
