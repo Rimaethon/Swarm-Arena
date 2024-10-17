@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a399fff9c54955b67fd8c95318f378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiInGameManager: {fileID: 0}
+  enemyDatabaseSO: {fileID: 11400000, guid: 21d9f96d3af30964e93436706385a574, type: 2}

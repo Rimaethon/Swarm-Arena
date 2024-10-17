@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00cf203a4d624507ae268fbb5aaa64e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioLibrary: {fileID: 11400000, guid: 24f71f2b8afaa2746902435b7389ac35, type: 2}
+  audioLibrarySO: {fileID: 11400000, guid: 24f71f2b8afaa2746902435b7389ac35, type: 2}
   musicSource: {fileID: 327546777}
   audioSourcePrefab: {fileID: 8775526081650818958, guid: 9677745dfde76c84faaa627aa2fbf3b2,
     type: 3}

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4991977484697956}
   - component: {fileID: 33273477584820218}
   - component: {fileID: 23425166734527830}
-  - component: {fileID: 252201787}
   m_Layer: 0
   m_Name: SM_Prop_Car_Wrecked_OpenBoot_01
   m_TagString: Metal
@@ -85,20 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &252201787
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127701705012346}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 4cec3590d1c69324abec2dbd3982a2a6, type: 3}
 --- !u!1 &1465862607380648
 GameObject:
   m_ObjectHideFlags: 0

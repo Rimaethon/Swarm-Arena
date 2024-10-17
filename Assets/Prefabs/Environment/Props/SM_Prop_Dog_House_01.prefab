@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4516673967332802}
   - component: {fileID: 33707366666757876}
   - component: {fileID: 23846319412280770}
-  - component: {fileID: 175497079}
+  - component: {fileID: 3180403496123143098}
   m_Layer: 0
   m_Name: SM_Prop_Dog_House_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &175497079
-MeshCollider:
+--- !u!65 &3180403496123143098
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 020bce4c44ddcf948a30f1b23ed4e4d4, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1.1894788, y: 1.2637181, z: 1.2308935}
+  m_Center: {x: 0, y: 0.63185906, z: 0}
