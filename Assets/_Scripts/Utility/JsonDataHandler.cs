@@ -1,22 +1,27 @@
 ﻿using System.IO;
 using Sirenix.Serialization;
 
-public class JsonDataHandler<T>
+namespace Utility
 {
-	private const string extension = ".json";
-
-	public void Save(T data, string path)
+	public class JsonDataHandler<T>
 	{
-		byte[] serializedData = SerializationUtility.SerializeValue(data, DataFormat.JSON);
-		File.WriteAllBytes(path + extension, serializedData);
-	}
+		private const string extension = ".json";
 
-	public T Load(string path)
-	{
-		if (!File.Exists(path + extension))
-			return default;
+		public void Save(T data, string path)
+		{
+			byte[] serializedData = SerializationUtility.SerializeValue(data, DataFormat.JSON);
+			File.WriteAllBytes(path + extension, serializedData);
+		}
 
-		byte[] bytes = File.ReadAllBytes(path + extension);
-		return SerializationUtility.DeserializeValue<T>(bytes, DataFormat.JSON);
+		public T Load(string path)
+		{
+			if (!File.Exists(path + extension))
+			{
+				return default;
+			}
+
+			byte[] bytes = File.ReadAllBytes(path + extension);
+			return SerializationUtility.DeserializeValue<T>(bytes, DataFormat.JSON);
+		}
 	}
 }

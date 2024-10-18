@@ -1,6 +1,8 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
+namespace Utility
+{
 	public abstract class SingletonSerializedScriptableObject<T> : SerializedScriptableObject where T : SingletonSerializedScriptableObject<T>
 	{
 		public static T Instance;
@@ -34,3 +36,4 @@ using UnityEngine;
 			}
 		}
 	}
+}
