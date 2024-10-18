@@ -1,12 +1,12 @@
-﻿using System;
-using Rimaethon.Runtime.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace _Scripts.UI
+namespace UI.Buttons
 {
-	public class UIClosePageButton:UIButton
+	public class UIClosePageButton : UIButton
 	{
-		[SerializeField] protected GameObject pageToClose;
+		[SerializeField]
+		protected GameObject pageToClose;
+
 		protected override void DoOnClick()
 		{
 			base.DoOnClick();

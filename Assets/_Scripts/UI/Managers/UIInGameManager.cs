@@ -1,124 +1,126 @@
 using System;
 using System.Collections.Generic;
 using Data;
-using Managers;
+using Event_System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInGameManager : MonoBehaviour,ITimeDependent
+namespace UI.Managers
 {
-	[SerializeField] private Slider levelSlider;
-	[SerializeField] private TextMeshProUGUI levelSliderText;
-	[SerializeField] private TextMeshProUGUI levelText;
-	[SerializeField] private TextMeshProUGUI killCountText;
-	[SerializeField] private TextMeshProUGUI remainingTimeText;
-	[SerializeField] private TextMeshProUGUI coinAmountText;
-	[SerializeField] private RectTransform healthBar;
-	[SerializeField] private GameObject heartPrefab;
-	[SerializeField] Button pauseButton;
-	[SerializeField] GameObject pausePage;
-	[SerializeField] GameObject winPage;
-	[SerializeField] GameObject losePage;
-	private readonly List<Image> playerHealth = new List<Image>();
-	private int remainingTime;
-	private int healthIndex = 0;
-
-	private void Awake()
+	public class UIInGameManager : MonoBehaviour
 	{
-		PlayerData playerData = SaveManager.Instance.GetPlayerData();
-		InitializeHealthBar(playerData.playerHealth);
-		InitializeSlider(playerData.experienceToNextLevel,playerData.currentExperience,playerData.currentPlayerLevel);
-		InitializeLevelStatus();
-	}
+		[SerializeField]
+		private Slider levelSlider;
+		[SerializeField]
+		private TextMeshProUGUI levelSliderText;
+		[SerializeField]
+		private TextMeshProUGUI levelText;
+		[SerializeField]
+		private TextMeshProUGUI killCountText;
+		[SerializeField]
+		private TextMeshProUGUI remainingTimeText;
+		[SerializeField]
+		private TextMeshProUGUI coinAmountText;
+		[SerializeField]
+		private RectTransform healthBar;
+		[SerializeField]
+		private GameObject heartPrefab;
+		[SerializeField]
+		private Button pauseButton;
+		[SerializeField]
+		private GameObject pausePage;
+		[SerializeField]
+		private GameObject winPage;
+		[SerializeField]
+		private GameObject losePage;
+		private readonly List<Image> playerHealthViews = new List<Image>();
+		private int disabledHealthViewCount;
 
-	private void OnEnable()
-	{
-		pauseButton.onClick.AddListener(OnPauseButtonClicked);
-		EventManager.RegisterHandler<OnUpdateUI>(UpdateUI);
-		EventManager.RegisterHandler<OnPlayerDamaged>(HandleHealthBar);
-		EventManager.RegisterHandler<OnPlayerDeath>(OpenLosePage);
-		EventManager.RegisterHandler<OnLevelCompleted>(OpenWinPage);
-	}
-
-	private void OnDisable()
-	{
-		pauseButton.onClick.RemoveListener(OnPauseButtonClicked);
-		EventManager.UnregisterHandler<OnUpdateUI>(UpdateUI);
-		EventManager.UnregisterHandler<OnPlayerDamaged>(HandleHealthBar);
-		EventManager.UnregisterHandler<OnPlayerDeath>(OpenLosePage);
-		EventManager.UnregisterHandler<OnLevelCompleted>(OpenWinPage);
-	}
-
-	private void OpenWinPage(OnLevelCompleted obj)
-	{
-		winPage.SetActive(true);
-	}
-
-	private void OpenLosePage(OnPlayerDeath obj)
-	{
-		losePage.SetActive(true);
-	}
-
-	private void HandleHealthBar(OnPlayerDamaged obj)
-	{
-		for(int i = 0; i < obj.Damage; i++)
+		private void OnEnable()
 		{
-			if(healthIndex >= playerHealth.Count)
+			pauseButton.onClick.AddListener(OnPauseButtonClicked);
+			EventManager.Subscribe<LevelEndEventArgs>(HandleLevelEndUI);
+		}
+
+		private void OnDisable()
+		{
+			pauseButton.onClick.RemoveListener(OnPauseButtonClicked);
+			EventManager.UnSubscribe<LevelEndEventArgs>(HandleLevelEndUI);
+		}
+
+		public void InitializeUI(LevelProgressData data)
+		{
+			InitializeHealthBar(data.playerHealth);
+			UpdateUI(data);
+		}
+
+		public void UpdateUI(LevelProgressData data)
+		{
+			killCountText.text = data.killCount.ToString();
+			coinAmountText.text = data.coinAmount.ToString();
+			UpdateSlider(data.experienceToNextLevel, data.experience, data.currentLevel);
+			TimeSpan timeSpan = TimeSpan.FromSeconds(data.remainingTime);
+			remainingTimeText.text = $"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+			UpdateHealthBar(data.playerHealth);
+		}
+
+		private void HandleLevelEndUI(LevelEndEventArgs data)
+		{
+			if (data.isLevelCompleted)
+			{
+				winPage.SetActive(true);
+			}
+			else
+			{
+				losePage.SetActive(true);
+			}
+		}
+
+		private void UpdateHealthBar(int playerHealth)
+		{
+			if (playerHealthViews.Count - disabledHealthViewCount == playerHealth)
+			{
 				return;
-			playerHealth[healthIndex].enabled = false;
-			healthIndex++;
+			}
+
+			for (int i = 0; i < playerHealth; i++)
+			{
+				if (disabledHealthViewCount >= playerHealthViews.Count)
+				{
+					return;
+				}
+
+				playerHealthViews[disabledHealthViewCount].enabled = false;
+				disabledHealthViewCount++;
+			}
 		}
-	}
 
-	private void UpdateUI(OnUpdateUI data)
-	{
-		killCountText.text = data.killCount.ToString();
-		coinAmountText.text = data.coinAmount.ToString();
-		InitializeSlider(data.experienceToNextLevel,data.experience,data.currentLevel);
-	}
-
-	private void InitializeLevelStatus()
-	{
-		coinAmountText.text = "0";
-		killCountText.text = "0";
-		remainingTime = SaveManager.Instance.GetCurrentLevelData().levelDurationInSeconds;
-		TimeSpan timeSpan = TimeSpan.FromSeconds(remainingTime);
-		remainingTimeText.text = $"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
-	}
-
-	private void InitializeHealthBar(int playerHealthAmount)
-	{
-		foreach (Transform child in healthBar)
+		private void InitializeHealthBar(int playerHealthAmount)
 		{
-			Destroy(child.gameObject);
+			foreach (Transform child in healthBar)
+			{
+				Destroy(child.gameObject);
+			}
+
+			for (int i = 0; i < playerHealthAmount; i++)
+			{
+				playerHealthViews.Add(Instantiate(heartPrefab, healthBar).GetComponent<Image>());
+			}
 		}
-		for (int i = 0; i < playerHealthAmount; i++)
+
+		private void UpdateSlider(int experienceToNextLevel, int experience, int playerLevel)
 		{
-			playerHealth.Add(Instantiate(heartPrefab, healthBar).GetComponent<Image>());
+			levelSlider.maxValue = experienceToNextLevel;
+			levelSlider.value = experience;
+			levelSliderText.text = $"{experience}/{experienceToNextLevel}";
+			levelText.text = playerLevel.ToString();
 		}
-	}
 
-	private void InitializeSlider(int experienceToNextLevel,int experience,int playerLevel)
-	{
-		levelSlider.maxValue = experienceToNextLevel;
-		levelSlider.value = experience;
-		levelSliderText.text = $"{experience}/{experienceToNextLevel}";
-		levelText.text = playerLevel.ToString();
-	}
-
-	private void OnPauseButtonClicked()
-	{
-		Time.timeScale = 0;
-		pausePage.SetActive(true);
-	}
-
-	public void OnTimeUpdate(long currentTime)
-	{
-		remainingTime--;
-		if(remainingTime < 0)
-			return;
-		TimeSpan timeSpan = TimeSpan.FromSeconds(remainingTime);
-		remainingTimeText.text = $"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+		private void OnPauseButtonClicked()
+		{
+			Time.timeScale = 0;
+			pausePage.SetActive(true);
+		}
 	}
 }

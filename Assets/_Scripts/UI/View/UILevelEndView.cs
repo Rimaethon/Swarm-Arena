@@ -2,22 +2,26 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UILevelEndView : MonoBehaviour
+namespace UI.View
 {
-    [SerializeField] Button returnToMainSceneButton;
+	public class UILevelEndView : MonoBehaviour
+	{
+		[SerializeField]
+		private Button returnToMainSceneButton;
 
-    private void OnEnable()
-    {
-        returnToMainSceneButton.onClick.AddListener(OnQuitButtonClicked);
-    }
+		private void OnEnable()
+		{
+			returnToMainSceneButton.onClick.AddListener(OnQuitButtonClicked);
+		}
 
-    private void OnDisable()
-    {
-        returnToMainSceneButton.onClick.RemoveListener(OnQuitButtonClicked);
-    }
+		private void OnDisable()
+		{
+			returnToMainSceneButton.onClick.RemoveListener(OnQuitButtonClicked);
+		}
 
-    private void OnQuitButtonClicked()
-    {
-        SceneController.Instance.LoadScene(1);
-    }
+		private void OnQuitButtonClicked()
+		{
+			SceneController.Instance.LoadScene(1);
+		}
+	}
 }

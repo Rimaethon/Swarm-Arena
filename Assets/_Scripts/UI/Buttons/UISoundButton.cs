@@ -1,19 +1,23 @@
 ﻿using Data;
 using Managers;
-using Rimaethon.Runtime.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Buttons
 {
-	public class UISoundButton:UIButton
+	public class UISoundButton : UIButton
 	{
-		[SerializeField] private Sprite soundOnImage;
-		[SerializeField] private Sprite soundOffImage;
-		[SerializeField] private bool isSFX;
-		[SerializeField] private TextMeshProUGUI text;
-		[SerializeField] private Image image;
+		[SerializeField]
+		private Sprite soundOnImage;
+		[SerializeField]
+		private Sprite soundOffImage;
+		[SerializeField]
+		private bool isSFX;
+		[SerializeField]
+		private TextMeshProUGUI text;
+		[SerializeField]
+		private Image image;
 		private SettingsData settingsData;
 
 		protected override void Awake()
@@ -41,7 +45,8 @@ namespace UI
 		protected override void DoOnClick()
 		{
 			base.DoOnClick();
-			if(isSFX)
+
+			if (isSFX)
 			{
 				settingsData.IsSFXOn = !settingsData.IsSFXOn;
 				HandleVisual();
@@ -51,6 +56,7 @@ namespace UI
 				settingsData.IsMusicOn = !settingsData.IsMusicOn;
 				HandleVisual();
 			}
+
 			SaveManager.Instance.SetSettingsData(settingsData);
 		}
 	}

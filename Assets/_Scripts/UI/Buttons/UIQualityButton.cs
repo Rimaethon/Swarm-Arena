@@ -1,12 +1,12 @@
-﻿using Rimaethon.Runtime.UI;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-namespace _Scripts.UI
+namespace UI.Buttons
 {
-	public class UIQualityButton:UIButton
+	public class UIQualityButton : UIButton
 	{
-		[SerializeField] TextMeshProUGUI qualityText;
+		[SerializeField]
+		private TextMeshProUGUI qualityText;
 		private string[] qualityNames;
 
 		protected override void Awake()

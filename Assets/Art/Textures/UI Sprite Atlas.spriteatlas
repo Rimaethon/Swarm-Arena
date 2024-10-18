@@ -44,9 +44,10 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
-    - {fileID: 102900000, guid: c54b7dcc404bcf442bac3b2953d0b8bc, type: 3}
-    - {fileID: 102900000, guid: 56237f7aa128a3544ada0a2bd5c74117, type: 3}
-    - {fileID: 102900000, guid: 983cd34f3c6e84f4fa60d96c7d57833e, type: 3}
+    - {fileID: 102900000, guid: b764a1f8793786e4da64108dc62b06a2, type: 3}
+    - {fileID: 102900000, guid: 2f3f8095d20b7d047a438bc2deef6116, type: 3}
+    - {fileID: 102900000, guid: 83da404f71f9c9849b662ff9e82f6237, type: 3}
+    - {fileID: 102900000, guid: ff93612f0f954f24aa3996864b8ce942, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -55,8 +56,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1b43931083419491d8b290f0c1fad04b, type: 3}
   - {fileID: 21300000, guid: c43d9020ced317d4d86e90f067811834, type: 3}
   - {fileID: 21300000, guid: 3794f280dbc1a43e0b04594ca6a1a998, type: 3}
+  - {fileID: 21300000, guid: 6d034811652a84633bc8c63d22ce5574, type: 3}
   - {fileID: 21300000, guid: d8dfea1100ec541b684f3101cad0d335, type: 3}
+  - {fileID: 21300000, guid: 8865df1114fa24fed914687ef9ce0ce8, type: 3}
   - {fileID: 21300000, guid: 63aca581b7985154983254acc3c4ec5f, type: 3}
+  - {fileID: 21300000, guid: 5a350ac1f8e0a416499529612b3f7dab, type: 3}
   - {fileID: 21300000, guid: 6a1f2ec1b291243919959448562d19aa, type: 3}
   - {fileID: 21300000, guid: 5a6b42d1cb16d4e80a04cea43bc257bd, type: 3}
   - {fileID: 21300000, guid: 40f8ecd1b27d34a80813bf14c543baba, type: 3}
@@ -72,20 +76,25 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cf33b4f588e264da0b0d1264f151e2ff, type: 3}
   - {fileID: 21300000, guid: 3a057b166165546afb4bab7fbec93a29, type: 3}
   - {fileID: 21300000, guid: d57994a69e680444b95c92e917a9c843, type: 3}
+  - {fileID: 21300000, guid: 33effd6735e414dc7b70ded5e8bb47f8, type: 3}
   - {fileID: 21300000, guid: d90e0f970eb474d3bb0260566c2061c2, type: 3}
   - {fileID: 21300000, guid: 0aff41489ca2441879fe4da19a0b8589, type: 3}
   - {fileID: 21300000, guid: 535d5068f6e6f4174a907fe1688dc8c1, type: 3}
   - {fileID: 21300000, guid: 64a9be7877245ac468058e7ce8c1898f, type: 3}
   - {fileID: 21300000, guid: 4e61e7096fc78431092f4d337536ef68, type: 3}
   - {fileID: 21300000, guid: 43d850e9432604fbe9fc16c8c0fa806a, type: 3}
+  - {fileID: 21300000, guid: f050261a73f9447e9874b79c3b654818, type: 3}
   - {fileID: 21300000, guid: 1e4107dadfbe1487ebf4a991ecd58b4e, type: 3}
   - {fileID: 21300000, guid: 5b56d9fa0e8bd6e409ed188db38a692c, type: 3}
   - {fileID: 21300000, guid: 0dc6a38b1e62c426eb1a8ceaea787d4a, type: 3}
+  - {fileID: 21300000, guid: 787b8ddbb50ef4efcb4ec6361a971b15, type: 3}
+  - {fileID: 21300000, guid: 48ec293c4be8a45b8a0cafb95cf1288c, type: 3}
   - {fileID: 21300000, guid: 221db54c6537e4c20bbbd4071f86e4fd, type: 3}
   - {fileID: 21300000, guid: f5c1ccbc05ca242e1be74ed91ea696d4, type: 3}
   - {fileID: 21300000, guid: c965160d8643b4ceb8a96e344d4fe2ff, type: 3}
   - {fileID: 21300000, guid: 2004a81dfce68456ea4736889a28f41b, type: 3}
   - {fileID: 21300000, guid: 6bbcba4e267be464998897741b81d508, type: 3}
+  - {fileID: 21300000, guid: f0c5a27e83b9744da98d350a200ff06f, type: 3}
   - {fileID: 21300000, guid: 804461bef59b141dba258fc997c8ca15, type: 3}
   - {fileID: 21300000, guid: a23a57be640054bf08deecbc33c70a5e, type: 3}
   - {fileID: 21300000, guid: d3b345ce557f3498482177b03ea843b8, type: 3}
@@ -96,8 +105,11 @@ SpriteAtlas:
   - StageFrame_n_Purple
   - Range Attribute Icon
   - StageFrame_n_Blue
+  - ResourceBar_Icon_Gem
   - ResourceBar_Btn_Single_Yellow
+  - ResourceBar_Icon_Energy
   - Magazine Size Attribute Icon
+  - Icon_PictoIcon_Pause
   - StageFrame_n
   - fx_star_white
   - Icon_ImageIcon_Map_l
@@ -113,20 +125,25 @@ SpriteAtlas:
   - Cooldown Attribute Icon
   - ResourceBar_Bg
   - Button_Circle128_Dark
+  - ResourceBar_Icon_Gold
   - Pictoicon_Question
   - Slider_Level01_Fill_Blue
   - Button01_White
   - FireRate Icon
   - ResourceBar_Btn_Single_Purple
   - Button03_Blue
+  - Pictoicon_Skull
   - ResourceBar_Btn_Single_Green
   - AllAxis_Outline
   - Pictoicon_Sound_Off
+  - Icon_Heart
+  - Pictoicon_Time
   - Icon_PictoIcon_Setting02
   - Button_FlushRight_White
   - StageFrame_s
   - Pictoicon_Volume_On
   - Button01_Blue
+  - Pictoicon_Sound
   - Button01_Yellow
   - StageFrame_d
   - Pictoicon_Volume_Off

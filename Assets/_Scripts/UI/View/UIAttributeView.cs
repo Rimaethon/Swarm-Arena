@@ -1,26 +1,27 @@
-﻿using Data;
+﻿using Enums;
+using Scriptable_Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Scripts.UI
+namespace UI.View
 {
-	public class UIAttributeView:MonoBehaviour
+	public class UIAttributeView : MonoBehaviour
 	{
 		public ItemAttributeTypes attributeType;
-		public int itemID;
 		public Image icon;
 		public Image background;
 		public TextMeshProUGUI levelText;
 		public TextMeshProUGUI titleText;
 		public Image selectedHighlight;
+		public int itemID;
 
-		public void SetAttribute(ItemAttribute attribute,Sprite backgroundSprite)
+		public void SetAttribute(ItemAttributeData attributeData, Sprite backgroundSprite)
 		{
-			icon.sprite = attribute.icon;
+			icon.sprite = attributeData.icon;
 			background.sprite = backgroundSprite;
 			levelText.text = "Lv. 0";
-			titleText.text = attribute.title;
+			titleText.text = attributeData.title;
 		}
 	}
 }

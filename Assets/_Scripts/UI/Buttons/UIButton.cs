@@ -1,38 +1,19 @@
-﻿	using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Rimaethon.Runtime.UI
+namespace UI.Buttons
 {
-	public class UIButton : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,IPointerUpHandler
+	public class UIButton : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 	{
-		[HideInInspector] public Button Button;
-		[HideInInspector] public RectTransform RectTransform;
-		protected Vector3 OriginalScale=>Vector3.one;
+		[HideInInspector]
+		public Button Button;
+		[HideInInspector]
+		public RectTransform RectTransform;
 		protected Tween ScaleDownTween;
 		protected Tween ScaleUpTween;
-
-		public void OnPointerClick(PointerEventData eventData)
-		{
-			if(!Button.isActiveAndEnabled)
-				return;
-			DoOnClick();
-		}
-
-		public void OnPointerDown(PointerEventData eventData)
-		{
-			if(!Button.isActiveAndEnabled)
-				return;
-			DoOnPointerDown();
-		}
-
-		public void OnPointerUp(PointerEventData eventData)
-		{
-			if(!Button.isActiveAndEnabled)
-				return;
-			DoOnPointerUp();
-		}
+		protected Vector3 OriginalScale => Vector3.one;
 
 		protected virtual void Awake()
 		{
@@ -51,22 +32,53 @@ namespace Rimaethon.Runtime.UI
 			ScaleUpTween.Kill();
 		}
 
+		public void OnPointerClick(PointerEventData eventData)
+		{
+			if (!Button.isActiveAndEnabled)
+			{
+				return;
+			}
+
+			DoOnClick();
+		}
+
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			if (!Button.isActiveAndEnabled)
+			{
+				return;
+			}
+
+			DoOnPointerDown();
+		}
+
+		public void OnPointerUp(PointerEventData eventData)
+		{
+			if (!Button.isActiveAndEnabled)
+			{
+				return;
+			}
+
+			DoOnPointerUp();
+		}
+
 		protected virtual void DoOnClick()
 		{
 			ScaleDownTween.Kill();
 			ScaleUpTween.Kill();
-//				AudioManager.Instance.PlaySFX(SFXClips.UIButtonSound);
+
+			//				AudioManager.Instance.PlaySFX(SFXClips.UIButtonSound);
 			RectTransform.localScale = OriginalScale;
 		}
 
 		protected virtual void DoOnPointerDown()
 		{
-			ScaleDownTween=RectTransform.DOScale(OriginalScale * 0.95f, 0.075f).SetUpdate(UpdateType.Fixed);
+			ScaleDownTween = RectTransform.DOScale(OriginalScale * 0.95f, 0.075f).SetUpdate(UpdateType.Fixed);
 		}
 
 		protected virtual void DoOnPointerUp()
 		{
-			ScaleUpTween=RectTransform.DOScale(OriginalScale, 0.075f).SetUpdate(UpdateType.Fixed);
+			ScaleUpTween = RectTransform.DOScale(OriginalScale, 0.075f).SetUpdate(UpdateType.Fixed);
 		}
 	}
 }
