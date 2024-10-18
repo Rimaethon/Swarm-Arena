@@ -1,66 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+namespace Object_Pool
+{
 	public class ObjectPool : MonoBehaviour
 	{
-		[HideInInspector] public PoolAbleObject Prefab;
-		[HideInInspector] public int Size;
-		[HideInInspector] public List<PoolAbleObject> AvailableObjectsPool;
-		private GameObject parent;
-		private static readonly Dictionary<PoolAbleObject, ObjectPool> objectPools = new Dictionary<PoolAbleObject, ObjectPool>();
+		private Queue<PoolAbleObject> availableObjectsPool;
+		private PoolAbleObject prefab;
 
-		~ObjectPool()
+		public void InitializePool(PoolAbleObject prefab, int size)
 		{
-			objectPools.Clear();
-		}
-
-		public static ObjectPool CreateInstance(PoolAbleObject Prefab, int Size)
-		{
-			ObjectPool pool;
-
-			if (objectPools.TryGetValue(Prefab, out ObjectPool objectPool))
-			{
-				pool = objectPool;
-			}
-			else
-			{
-				GameObject poolObject = new GameObject(Prefab + " Pool");
-				pool= poolObject.AddComponent<ObjectPool>();
-				pool.parent = poolObject;
-				pool.Prefab = Prefab;
-				pool.Size = Size;
-				pool.AvailableObjectsPool = new List<PoolAbleObject>();
-				pool.CreateObjects();
-				objectPools.Add(Prefab, pool);
-			}
-			return pool;
-		}
-
-		private void CreateObjects()
-		{
-			for (int i = 0; i < Size; i++)
-			{
-				CreateObject();
-			}
-		}
-
-		private void CreateObject()
-		{
-			PoolAbleObject poolAbleObject = Instantiate(Prefab, Vector3.zero, Quaternion.identity, parent.transform);
-			poolAbleObject.Parent = this;
-			poolAbleObject.gameObject.SetActive(false);
+			this.prefab = prefab;
+			availableObjectsPool = new Queue<PoolAbleObject>();
+			CreateObjects(size);
 		}
 
 		public PoolAbleObject GetObject(Vector3 position, Quaternion rotation)
 		{
-			if (AvailableObjectsPool.Count == 0)
+			if (availableObjectsPool.Count == 0)
 			{
-				CreateObject();
+				CreateObjects();
 			}
 
-			PoolAbleObject instance = AvailableObjectsPool[0];
-			AvailableObjectsPool.RemoveAt(0);
+			PoolAbleObject instance = availableObjectsPool.Dequeue();
 			instance.transform.position = position;
 			instance.transform.rotation = rotation;
 			instance.gameObject.SetActive(true);
@@ -70,6 +32,17 @@ using UnityEngine;
 		public void ReturnObjectToPool(PoolAbleObject pooledObject)
 		{
 			pooledObject.gameObject.SetActive(false);
-			AvailableObjectsPool.Add(pooledObject);
+			availableObjectsPool.Enqueue(pooledObject);
+		}
+
+		private void CreateObjects(int amount = 1)
+		{
+			for (int i = 0; i < amount; i++)
+			{
+				PoolAbleObject poolAbleObject = Instantiate(prefab, Vector3.zero, Quaternion.identity, transform);
+				poolAbleObject.Parent = this;
+				poolAbleObject.gameObject.SetActive(false);
+			}
 		}
 	}
+}

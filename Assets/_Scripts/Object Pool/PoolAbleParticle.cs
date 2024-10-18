@@ -1,3 +1,6 @@
-﻿    public class PoolAbleParticle : PoolAbleObject
-    {
-    }
+﻿namespace Object_Pool
+{
+	public class PoolAbleParticle : PoolAbleObject
+	{
+	}
+}

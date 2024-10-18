@@ -1,32 +1,33 @@
 ﻿using Data;
-using Rimaethon.Scripts.Utility;
+using Event_System;
+using Scriptable_Objects;
 using UnityEngine;
+using Utility;
 
 namespace Managers
 {
 	[DefaultExecutionOrder(-1000)]
 	public class SaveManager : PersistentSingleton<SaveManager>
 	{
-		[SerializeField] WeaponDatabaseSO weaponDatabase;
-		private JsonDataHandler<SettingsData> settingsDataHandler;
-		private JsonDataHandler<PlayerData> playerDataHandler;
-		private JsonDataHandler<LevelData> levelDataHandler;
-		private readonly OnSettingsChanged onSettingsChanged = new OnSettingsChanged();
-		private readonly OnPlayerDataChanged onPlayerDataChanged = new OnPlayerDataChanged();
-
-		private SettingsData settingsData;
-		private PlayerData playerData;
+		[SerializeField]
+		private WeaponDatabaseSO weaponDatabase;
+		private readonly PlayerDataChangedEventArgs playerDataChangedEventArgs = new PlayerDataChangedEventArgs();
+		private readonly SettingsChangedEventArgs settingsChangedEventArgs = new SettingsChangedEventArgs();
 		private LevelData currentLevelData;
-
-		private string settingsSavePath;
-		private string playerSavePath;
-		private string levelSavePath;
 		private int currentLevelID;
+		private JsonDataHandler<LevelData> levelDataHandler;
+		private string levelSavePath;
+		private PlayerData playerData;
+		private JsonDataHandler<PlayerData> playerDataHandler;
+		private string playerSavePath;
+		private SettingsData settingsData;
+		private JsonDataHandler<SettingsData> settingsDataHandler;
+		private string settingsSavePath;
 
 		protected override void Awake()
 		{
 			base.Awake();
-			settingsSavePath= Application.persistentDataPath + "/settings";
+			settingsSavePath = Application.persistentDataPath + "/settings";
 			playerSavePath = Application.persistentDataPath + "/player";
 			levelSavePath = Application.persistentDataPath + "/level";
 			settingsDataHandler = new JsonDataHandler<SettingsData>();
@@ -37,10 +38,10 @@ namespace Managers
 
 		private void LoadData()
 		{
-			settingsData =settingsDataHandler.Load(settingsSavePath) ?? new SettingsData();
+			settingsData = settingsDataHandler.Load(settingsSavePath) ?? new SettingsData();
 			playerData = playerDataHandler.Load(playerSavePath) ?? new PlayerData(weaponDatabase);
 			currentLevelID = playerData.currentGameLevel;
-			currentLevelData =levelDataHandler.Load(levelSavePath + currentLevelID) ?? new LevelData();
+			currentLevelData = levelDataHandler.Load(levelSavePath + currentLevelID) ?? new LevelData();
 			SaveData();
 		}
 
@@ -60,8 +61,8 @@ namespace Managers
 		{
 			settingsData = data;
 			settingsDataHandler.Save(settingsData, settingsSavePath);
-			onSettingsChanged.settingsData = settingsData;
-			EventManager.Send(onSettingsChanged);
+			settingsChangedEventArgs.settingsData = settingsData;
+			EventManager.RaiseEvent(settingsChangedEventArgs);
 		}
 
 		public PlayerData GetPlayerData()
@@ -74,8 +75,8 @@ namespace Managers
 		{
 			playerData = data;
 			playerDataHandler.Save(playerData, playerSavePath);
-			onPlayerDataChanged.playerData = playerData;
-			EventManager.Send(onPlayerDataChanged);
+			playerDataChangedEventArgs.playerData = playerData;
+			EventManager.RaiseEvent(playerDataChangedEventArgs);
 		}
 
 		public LevelData GetCurrentLevelData()

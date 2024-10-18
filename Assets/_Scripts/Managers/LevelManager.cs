@@ -1,65 +1,105 @@
 ﻿using Data;
+using Event_System;
+using Interfaces;
+using Scriptable_Objects;
+using UI.Managers;
 using UnityEngine;
 
 namespace Managers
 {
-	public class LevelManager:MonoBehaviour,ITimeDependent
+	public class LevelManager : MonoBehaviour, ITimeDependent
 	{
-		private int levelTime;
-		private int killCount;
-		private int coinAmount;
-		private int experience;
-		private int experienceToNextLevel;
-		private readonly OnLevelCompleted onLevelCompleted = new OnLevelCompleted();
-		private readonly OnUpdateUI onUpdateUI = new OnUpdateUI();
+		[SerializeField]
+		private UIInGameManager uiInGameManager;
+		[SerializeField]
+		private EnemyDatabaseSO enemyDatabaseSO;
+		private LevelProgressData levelProgressData;
 		private PlayerData playerData;
 
 		private void Awake()
 		{
-			levelTime = SaveManager.Instance.GetCurrentLevelData().levelDurationInSeconds;
 			playerData = SaveManager.Instance.GetPlayerData();
-			experienceToNextLevel = playerData.experienceToNextLevel*playerData.currentPlayerLevel;
-			experience=playerData.currentExperience;
+
+			levelProgressData = new LevelProgressData
+				(SaveManager.Instance.GetCurrentLevelData().levelDurationInSeconds,
+				 0,
+				 0,
+				 playerData.currentExperience,
+				 playerData.currentPlayerLevel, playerData.experienceToNextLevel * playerData.currentPlayerLevel, playerData.playerHealth);
+
+			if (uiInGameManager == null)
+			{
+				uiInGameManager = FindObjectOfType<UIInGameManager>();
+			}
+
+			uiInGameManager.InitializeUI(levelProgressData);
 		}
 
 		private void OnEnable()
 		{
-			EventManager.RegisterHandler<OnEnemyKilled>(HandleEnemyKilled);
+			EventManager.Subscribe<EnemyDamagedEventArgs>(HandleEnemyKilled);
+			EventManager.Subscribe<PlayerDamagedEventArgs>(HandlePlayerDamaged);
 		}
 
 		private void OnDisable()
 		{
-			EventManager.UnregisterHandler<OnEnemyKilled>(HandleEnemyKilled);
-		}
-
-		private void HandleEnemyKilled(OnEnemyKilled data)
-		{
-			killCount++;
-			coinAmount += data.coinAmount;
-			experience += data.expAmount;
-
-			if(experience >= experienceToNextLevel)
-			{
-				playerData.currentPlayerLevel++;
-				experience -= experienceToNextLevel;
-				experienceToNextLevel = playerData.experienceToNextLevel*playerData.currentPlayerLevel;
-			}
-			onUpdateUI.killCount = killCount;
-			onUpdateUI.coinAmount = coinAmount;
-			onUpdateUI.experience = experience;
-			onUpdateUI.currentLevel = playerData.currentPlayerLevel;
-			onUpdateUI.experienceToNextLevel = experienceToNextLevel;
-			EventManager.Send(onUpdateUI);
+			EventManager.UnSubscribe<EnemyDamagedEventArgs>(HandleEnemyKilled);
+			EventManager.UnSubscribe<PlayerDamagedEventArgs>(HandlePlayerDamaged);
 		}
 
 		public void OnTimeUpdate(long currentTime)
 		{
-			if (levelTime < 0)
+			if (levelProgressData.remainingTime < 0)
+			{
 				return;
-			levelTime--;
-			if (levelTime != 0) return;
-			EventManager.Send(onLevelCompleted);
+			}
+
+			levelProgressData.remainingTime--;
+			uiInGameManager.UpdateUI(levelProgressData);
+			if (levelProgressData.remainingTime != 0) return;
+
+			LevelEndEventArgs levelEndEventArgs = new LevelEndEventArgs
+			{
+				isLevelCompleted = true
+			};
+
+			EventManager.RaiseEvent(levelEndEventArgs);
 			SaveManager.Instance.SetPlayerData(playerData);
+		}
+
+		private void HandleEnemyKilled(EnemyDamagedEventArgs data)
+		{
+			if (!data.isDead)
+			{
+				return;
+			}
+
+			levelProgressData.killCount++;
+			levelProgressData.coinAmount += enemyDatabaseSO.enemies[data.EnemyType].coinDropAmount;
+			levelProgressData.experience += enemyDatabaseSO.enemies[data.EnemyType].Experience;
+
+			if (levelProgressData.experience >= levelProgressData.experienceToNextLevel)
+			{
+				levelProgressData.currentLevel++;
+				levelProgressData.experience -= levelProgressData.experienceToNextLevel;
+				levelProgressData.experienceToNextLevel = playerData.experienceToNextLevel * playerData.currentPlayerLevel;
+			}
+
+			uiInGameManager.UpdateUI(levelProgressData);
+		}
+
+		private void HandlePlayerDamaged(PlayerDamagedEventArgs damageData)
+		{
+			levelProgressData.playerHealth -= damageData.Damage;
+			uiInGameManager.UpdateUI(levelProgressData);
+			if (levelProgressData.playerHealth > 0) return;
+
+			LevelEndEventArgs levelEndEventArgs = new LevelEndEventArgs
+			{
+				isLevelCompleted = false
+			};
+
+			EventManager.RaiseEvent(levelEndEventArgs);
 		}
 	}
 }

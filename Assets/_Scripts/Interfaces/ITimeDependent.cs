@@ -1,5 +1,7 @@
-﻿
-internal interface ITimeDependent
+﻿namespace Interfaces
 {
-	void OnTimeUpdate(long currentTime);
+	internal interface ITimeDependent
+	{
+		void OnTimeUpdate(long currentTime);
+	}
 }

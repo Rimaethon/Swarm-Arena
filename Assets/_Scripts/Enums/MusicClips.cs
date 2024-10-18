@@ -1,4 +1,7 @@
-public enum MusicClips
+namespace Enums
 {
-	BackgroundMusic = 0,
+	public enum MusicClips
+	{
+		BackgroundMusic = 0
+	}
 }
