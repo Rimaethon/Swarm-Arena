@@ -1,28 +1,18 @@
-﻿using System;
+﻿using Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Data
+namespace Scriptable_Objects
 {
-	[ CreateAssetMenu(fileName = "UpgradeAbleItem", menuName = "Data/UpgradeAbleItem")]
-	public class UpgradeAbleItemSO:SerializedScriptableObject
+	[CreateAssetMenu(fileName = "UpgradeAbleItem", menuName = "Data/UpgradeAbleItem")]
+	public class UpgradeAbleItemSO : SerializedScriptableObject
 	{
-		public SerializedDictionary<ItemAttributeTypes,ItemAttribute> _itemAttributes=new SerializedDictionary<ItemAttributeTypes, ItemAttribute>();
+		public SerializedDictionary<ItemAttributeTypes, ItemAttributeData> _itemAttributes = new SerializedDictionary<ItemAttributeTypes, ItemAttributeData>();
 		public bool isLocked;
 		public int unlockPrice;
 		public int unlockLevel;
 		public Sprite backgroundIcon;
 		public int itemID;
-	}
-
-	[Serializable]
-	public class ItemAttribute
-	{
-		public Sprite icon;
-		public string title;
-		public int maxLevel;
-		public float baseValue;
-		public float maxValue;
 	}
 }

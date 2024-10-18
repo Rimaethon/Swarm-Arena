@@ -1,17 +1,14 @@
-using Data;
+using Enums;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Weapon Data", menuName = "Data/Weapon Data")]
-public class WeaponDataSO : UpgradeAbleItemSO
+namespace Scriptable_Objects
 {
-    public AnimationClip reloadAnimation;
-    public BulletTrailDataSO TrailRenderer;
-    public GameObject weaponPrefab;
-    public WeaponType weaponType;
-}
-
-public enum WeaponType
-{
-    HANDGUN,
-    SKILL
+	[CreateAssetMenu(fileName = "Weapon Data", menuName = "Data/Weapon Data")]
+	public class WeaponDataSO : UpgradeAbleItemSO
+	{
+		public AnimationClip reloadAnimation;
+		public BulletTrailDataSO TrailRenderer;
+		public GameObject weaponPrefab;
+		public WeaponType weaponType;
+	}
 }

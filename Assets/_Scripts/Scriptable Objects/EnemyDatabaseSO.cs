@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-
-[ CreateAssetMenu(fileName = "Enemy Database", menuName = "Data/Enemy Database")]
-public class EnemyDatabaseSO : SerializedScriptableObject
+namespace Scriptable_Objects
 {
-    public Dictionary<int, GameObject> enemies = new Dictionary<int, GameObject>();
+	[CreateAssetMenu(fileName = "Enemy Database", menuName = "Data/Enemy Database")]
+	public class EnemyDatabaseSO : SerializedScriptableObject
+	{
+		public Dictionary<EnemyType, AIAgentConfigSO> enemies = new Dictionary<EnemyType, AIAgentConfigSO>();
+	}
 }
