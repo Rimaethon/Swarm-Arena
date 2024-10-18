@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4940047557502602}
   - component: {fileID: 33038709453927486}
   - component: {fileID: 23689433191530538}
-  - component: {fileID: 6216625736671474538}
+  - component: {fileID: 5485464534139562738}
   m_Layer: 0
   m_Name: SM_Bld_Junk_Shelter_02
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6216625736671474538
-MeshCollider:
+--- !u!65 &5485464534139562738
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -95,10 +95,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: fcdd3ee144ff16a439fd7f75852e4e6d, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 2.778321, y: 2.6857722, z: 2.7844353}
+  m_Center: {x: 0, y: 1.3389153, z: -0.0000005960467}
 --- !u!1001 &4368195622930701150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166,23 +165,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4368195622930701150}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4366354151464584054 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1852891835537448, guid: cc8dd3d9b9c68df43ab820bf993a3549,
-    type: 3}
-  m_PrefabInstance: {fileID: 4368195622930701150}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &437241558
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4366354151464584054}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 07aa8fa18998d0f46a405a812bd71576, type: 3}

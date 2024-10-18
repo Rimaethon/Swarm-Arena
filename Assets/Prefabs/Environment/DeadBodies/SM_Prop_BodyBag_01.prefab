@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4954529957840246}
   - component: {fileID: 33197448491393708}
   - component: {fileID: 23501092164052148}
-  - component: {fileID: 40974124}
+  - component: {fileID: 6254901613021710113}
   m_Layer: 0
   m_Name: SM_Prop_BodyBag_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &40974124
-MeshCollider:
+--- !u!65 &6254901613021710113
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: f481f5f99abbaaa41862d0fb81540bf4, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.5463482, y: 0.25068185, z: 1.9248261}
+  m_Center: {x: 0.012893829, y: 0.11409901, z: 0.037500776}

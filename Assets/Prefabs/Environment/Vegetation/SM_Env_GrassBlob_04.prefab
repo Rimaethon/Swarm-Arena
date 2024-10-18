@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4961889948552398}
   - component: {fileID: 33305159759385126}
   - component: {fileID: 23868644245904312}
-  - component: {fileID: 6529147473551640106}
+  - component: {fileID: 8477160626258644641}
   m_Layer: 0
   m_Name: SM_Env_GrassBlob_04
   m_TagString: Untagged
@@ -69,7 +69,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.01
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6529147473551640106
-MeshCollider:
+--- !u!65 &8477160626258644641
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 159c62eef0dc97643a002e6d0740dcef, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.8303416, y: 0.18345782, z: 1.0147631}
+  m_Center: {x: 0.0000019222502, y: 0.00000000745058, z: -0.0000009536747}

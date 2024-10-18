@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4638578500446524}
   - component: {fileID: 33634875800475074}
   - component: {fileID: 23376287270025122}
-  - component: {fileID: 2059269202881840287}
+  - component: {fileID: 4998414515077584415}
   m_Layer: 0
   m_Name: SM_Prop_DeadBody_Laying_Female_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2059269202881840287
-MeshCollider:
+--- !u!65 &4998414515077584415
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: 5ff943b7c6895174d89791738ad31444, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.76752985, y: 0.35063896, z: 1.8382621}
+  m_Center: {x: 0.039365843, y: 0.12091343, z: 0.07332161}

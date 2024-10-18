@@ -18,3 +18,5 @@ MonoBehaviour:
   Experience: 10
   coinDropAmount: 10
   Speed: 1
+  prefab: {fileID: 9073714641493574271, guid: 746a9f3a0cabafa42b40681f24aa6ef7, type: 3}
+  impactSOData: {fileID: 11400000, guid: a05107dfbf3a45b48970b5ab078bb3f9, type: 2}

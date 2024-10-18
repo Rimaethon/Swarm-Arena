@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4034078725370578}
   - component: {fileID: 33612842985629018}
   - component: {fileID: 23177363044546164}
-  - component: {fileID: 2602831274179050635}
   m_Layer: 0
   m_Name: SM_Env_Motorway_Tunnel_Destroyed_Left_01
   m_TagString: Concrete
@@ -84,17 +83,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2602831274179050635
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1480353829178616}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 50d578108050c794c9410ba6e1eb69a4, type: 3}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4797605835769740}
   - component: {fileID: 33231618029042604}
   - component: {fileID: 23567217606586810}
-  - component: {fileID: 8565452963885191250}
+  - component: {fileID: 8354267682187801622}
   m_Layer: 0
   m_Name: SM_Bld_House_02
   m_TagString: Concrete
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8565452963885191250
-MeshCollider:
+--- !u!65 &8354267682187801622
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -95,10 +95,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 722e137c12122384094f23ad42534faf, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 13.082597, y: 6.590475, z: 9.397012}
+  m_Center: {x: -1.2909818, y: 2.5212526, z: 0.028877433}
 --- !u!1 &1469100611508414
 GameObject:
   m_ObjectHideFlags: 0

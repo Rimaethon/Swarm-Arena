@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4487373785747688}
   - component: {fileID: 33512622003299902}
   - component: {fileID: 23342357671006806}
-  - component: {fileID: 5755034733344406389}
+  - component: {fileID: 4419099538179336616}
   m_Layer: 0
   m_Name: SM_Bld_Military_Tent_03
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5755034733344406389
-MeshCollider:
+--- !u!65 &4419099538179336616
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 02d9f281e4a622c4da2d79dde6ed35af, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 9.000718, y: 4.01774, z: 8.51311}
+  m_Center: {x: 0, y: 1.942893, z: 0}

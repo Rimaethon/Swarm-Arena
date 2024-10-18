@@ -95,10 +95,7 @@ GameObject:
   - component: {fileID: 1186974334524697455}
   - component: {fileID: 1153253287843756155}
   - component: {fileID: 1162603838422441001}
-  - component: {fileID: 8096668157186546790}
-  - component: {fileID: 4881859354834576175}
   - component: {fileID: 2115349377448834954}
-  - component: {fileID: 7076995076947727850}
   m_Layer: 12
   m_Name: Ammo_crate_01
   m_TagString: Metal
@@ -151,7 +148,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bb68a94905ffc0418608fc7e572ea42, type: 2}
-  - {fileID: 2100000, guid: 055895bf14b4957489d33976affd1cdf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -173,37 +169,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8096668157186546790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1185550226527156733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c0c7f6be6562b240a530e2ec99bce94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <InventorySize>k__BackingField: 5
-  <PrimaryInventorySystem>k__BackingField:
-    <InventorySlots>k__BackingField: []
-  <Offset>k__BackingField: 0
-  _interactableHighlightConfig: {fileID: 11400000, guid: c1eab1ce9b906ec41be5ea27311a0e7f,
-    type: 2}
---- !u!114 &4881859354834576175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1185550226527156733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bef53d3ce6743f24eb8d8436e44c7296, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 68a4be6d-830c-466f-9e3d-6d7dfb991f2d
 --- !u!65 &2115349377448834954
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -217,16 +182,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.44703612, y: 0.26436576, z: 0.20229736}
   m_Center: {x: -1.1441104e-14, y: 0.13218288, z: 0.0000012218953}
---- !u!135 &7076995076947727850
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1185550226527156733}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}

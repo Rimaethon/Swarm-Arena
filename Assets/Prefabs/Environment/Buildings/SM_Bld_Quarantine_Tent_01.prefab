@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4813616140874888}
   - component: {fileID: 33441166132039268}
   - component: {fileID: 23599799789735716}
-  - component: {fileID: 6414735950275906154}
+  - component: {fileID: 9143820602370400204}
   m_Layer: 0
   m_Name: SM_Bld_Quarantine_Tent_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6414735950275906154
-MeshCollider:
+--- !u!65 &9143820602370400204
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 44a29e3f51eff574994d6487d10cdf0a, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 5.59886, y: 3.2665076, z: 7.913352}
+  m_Center: {x: 0, y: 1.5515449, z: 0}

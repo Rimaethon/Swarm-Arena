@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4779526885788282}
   - component: {fileID: 33047241736220020}
   - component: {fileID: 23626723880294208}
-  - component: {fileID: 1524630521706859833}
   m_Layer: 0
   m_Name: Wooden Bat
   m_TagString: Untagged
@@ -85,20 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1524630521706859833
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145237178023060}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.102658086
-  m_Height: 0.64714783
-  m_Direction: 2
-  m_Center: {x: -0.0032424396, y: 0.0011311604, z: 0.6290892}
 --- !u!1 &1230774735970100
 GameObject:
   m_ObjectHideFlags: 0
