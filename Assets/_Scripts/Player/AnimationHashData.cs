@@ -14,5 +14,6 @@ namespace Player
 		public static readonly int Death = Animator.StringToHash("Death");
 		public static readonly int LightAttack = Animator.StringToHash("LightAttack");
 		public static readonly int HeavyAttack = Animator.StringToHash("HeavyAttack");
+		public static readonly int RifleReload = Animator.StringToHash("RifleReload");
 	}
 }
